@@ -1,41 +1,31 @@
-import { serve } from "bun";
-import index from "./index.html";
+import { Hono } from 'hono';
+import { loggerMiddleware } from './backend/middlewares/logger';
+import { errorHandler } from './backend/middlewares/errorHandler';
+import authRouter from './backend/api/v1/routes/auth.route';
+import index from './index.html';
 
-const server = serve({
-  routes: {
-    // Serve index.html for all unmatched routes.
-    "/*": index,
+const app = new Hono();
 
-    "/api/hello": {
-      async GET(req) {
-        return Response.json({
-          message: "Hello, world!",
-          method: "GET",
-        });
-      },
-      async PUT(req) {
-        return Response.json({
-          message: "Hello, world!",
-          method: "PUT",
-        });
-      },
-    },
+// Global Middlewares
+app.use('*', loggerMiddleware);
+app.onError(errorHandler);
 
-    "/api/hello/:name": async req => {
-      const name = req.params.name;
-      return Response.json({
-        message: `Hello, ${name}!`,
-      });
-    },
-  },
+// API Routes (v1)
+app.route('/api/v1/auth', authRouter);
 
-  development: process.env.NODE_ENV !== "production" && {
-    // Enable browser hot reloading in development
-    hmr: true,
+// Health check
+app.get('/api/v1/health', (c) => c.json({ status: 'ok', timestamp: new Date().toISOString() }));
 
-    // Echo console logs from the browser to the server
-    console: true,
-  },
+// Serve frontend for all unmatched routes
+app.get('*', (c) => {
+  return new Response(index, {
+    headers: { 'Content-Type': 'text/html' },
+  });
 });
 
-console.log(`🚀 Server running at ${server.url}`);
+export default {
+  port: process.env.PORT || 3000,
+  fetch: app.fetch,
+};
+
+console.log(`🚀 Server running on port ${process.env.PORT || 3000}`);
