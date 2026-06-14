@@ -21,51 +21,23 @@ function lazyPage(
   );
 }
 
-const LandingPage = () =>
-  lazyPage(() => import("@/pages/marketing/LandingPage"), "LandingPage");
-const LoginPage = () =>
-  lazyPage(() => import("@/pages/auth/LoginPage"), "LoginPage");
-const SignupPage = () =>
-  lazyPage(() => import("@/pages/auth/SignupPage"), "SignupPage");
-const DashboardPage = () =>
-  lazyPage(() => import("@/pages/dashboard/DashboardPage"), "DashboardPage");
-const ProjectsPage = () =>
-  lazyPage(() => import("@/pages/projects/ProjectsPage"), "ProjectsPage");
-const ProjectDetailPage = () =>
-  lazyPage(
-    () => import("@/pages/projects/ProjectDetailPage"),
-    "ProjectDetailPage",
-  );
-const TaskDetailPage = () =>
-  lazyPage(() => import("@/pages/tasks/TaskDetailPage"), "TaskDetailPage");
-const MyTasksPage = () =>
-  lazyPage(() => import("@/pages/tasks/MyTasksPage"), "MyTasksPage");
-const CalendarPage = () =>
-  lazyPage(() => import("@/pages/calendar/CalendarPage"), "CalendarPage");
-const NotificationsPage = () =>
-  lazyPage(
-    () => import("@/pages/notifications/NotificationsPage"),
-    "NotificationsPage",
-  );
-const SettingsPage = () =>
-  lazyPage(() => import("@/pages/settings/SettingsPage"), "SettingsPage");
-const NotFoundPage = () =>
-  lazyPage(() => import("@/pages/NotFoundPage"), "NotFoundPage");
-
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <LandingPage />,
+    element: lazyPage(
+      () => import("@/pages/marketing/LandingPage"),
+      "LandingPage",
+    ),
     errorElement: <ErrorPage />,
   },
   {
     path: "/login",
-    element: <LoginPage />,
+    element: lazyPage(() => import("@/pages/auth/LoginPage"), "LoginPage"),
     errorElement: <ErrorPage />,
   },
   {
     path: "/signup",
-    element: <SignupPage />,
+    element: lazyPage(() => import("@/pages/auth/SignupPage"), "SignupPage"),
     errorElement: <ErrorPage />,
   },
   {
@@ -76,21 +48,69 @@ export const router = createBrowserRouter([
         element: <AppShell />,
         errorElement: <ErrorPage />,
         children: [
-          { path: "/dashboard", element: <DashboardPage /> },
-          { path: "/projects", element: <ProjectsPage /> },
-          { path: "/projects/:id", element: <ProjectDetailPage /> },
-          { path: "/tasks/:id", element: <TaskDetailPage /> },
-          { path: "/my-tasks", element: <MyTasksPage /> },
-          { path: "/calendar", element: <CalendarPage /> },
-          { path: "/notifications", element: <NotificationsPage /> },
-          { path: "/settings", element: <SettingsPage /> },
+          {
+            path: "/dashboard",
+            element: lazyPage(
+              () => import("@/pages/dashboard/DashboardPage"),
+              "DashboardPage",
+            ),
+          },
+          {
+            path: "/projects",
+            element: lazyPage(
+              () => import("@/pages/projects/ProjectsPage"),
+              "ProjectsPage",
+            ),
+          },
+          {
+            path: "/projects/:id",
+            element: lazyPage(
+              () => import("@/pages/projects/ProjectDetailPage"),
+              "ProjectDetailPage",
+            ),
+          },
+          {
+            path: "/tasks/:id",
+            element: lazyPage(
+              () => import("@/pages/tasks/TaskDetailPage"),
+              "TaskDetailPage",
+            ),
+          },
+          {
+            path: "/my-tasks",
+            element: lazyPage(
+              () => import("@/pages/tasks/MyTasksPage"),
+              "MyTasksPage",
+            ),
+          },
+          {
+            path: "/calendar",
+            element: lazyPage(
+              () => import("@/pages/calendar/CalendarPage"),
+              "CalendarPage",
+            ),
+          },
+          {
+            path: "/notifications",
+            element: lazyPage(
+              () => import("@/pages/notifications/NotificationsPage"),
+              "NotificationsPage",
+            ),
+          },
+          {
+            path: "/settings",
+            element: lazyPage(
+              () => import("@/pages/settings/SettingsPage"),
+              "SettingsPage",
+            ),
+          },
         ],
       },
     ],
   },
   {
     path: "*",
-    element: <NotFoundPage />,
+    element: lazyPage(() => import("@/pages/NotFoundPage"), "NotFoundPage"),
     errorElement: <ErrorPage />,
   },
 ]);
