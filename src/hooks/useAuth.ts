@@ -1,7 +1,15 @@
 import { useAuthStore } from "@/store/auth.store";
+import { signOut as supabaseSignOut } from "@/lib/auth";
 
-// Auth hook (PRD §9). Exposes the current session; sign-in/up wired in Phase 1.
+// Auth hook (PRD §9). Backed by real Supabase Auth (see auth.store).
 export function useAuth() {
   const user = useAuthStore((s) => s.user);
-  return { user, isAuthenticated: user !== null };
+  const status = useAuthStore((s) => s.status);
+  return {
+    user,
+    status,
+    isAuthenticated: status === "authed",
+    isLoading: status === "loading",
+    signOut: supabaseSignOut,
+  };
 }
