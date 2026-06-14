@@ -1,0 +1,14 @@
+import { create } from "zustand";
+
+// Client-only UI state (PRD §9): sidebar, modals, etc.
+interface UIState {
+  sidebarOpen: boolean;
+  toggleSidebar: () => void;
+  setSidebarOpen: (open: boolean) => void;
+}
+
+export const useUIStore = create<UIState>((set) => ({
+  sidebarOpen: true,
+  toggleSidebar: () => set((s) => ({ sidebarOpen: !s.sidebarOpen })),
+  setSidebarOpen: (open) => set({ sidebarOpen: open }),
+}));
