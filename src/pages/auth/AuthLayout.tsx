@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Hexagon, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { fadeUp } from "@/lib/motion";
@@ -54,7 +54,7 @@ export function AuthLayout({
 
       {/* Form panel */}
       <div className="flex items-center justify-center bg-card p-6">
-        <motion.div
+        <m.div
           variants={fadeUp}
           initial="hidden"
           animate="show"
@@ -68,7 +68,7 @@ export function AuthLayout({
           <div className="mt-6 text-center text-sm text-muted-foreground">
             {footer}
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 /** Animated progress bar (fill grows on mount). */
@@ -23,7 +23,7 @@ export function Progress({
       aria-valuemin={0}
       aria-valuemax={100}
     >
-      <motion.div
+      <m.div
         className={cn("h-full rounded-full bg-primary", barClassName)}
         initial={{ width: 0 }}
         animate={{ width: `${clamped}%` }}

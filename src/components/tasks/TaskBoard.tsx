@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Plus, MoreHorizontal } from "lucide-react";
 import { TaskCard } from "./TaskCard";
 import { staggerContainer } from "@/lib/motion";
@@ -49,7 +49,7 @@ export function TaskBoard({ tasks }: { tasks: Task[] }) {
               </div>
             </div>
 
-            <motion.div
+            <m.div
               variants={staggerContainer}
               initial="hidden"
               animate="show"
@@ -63,7 +63,7 @@ export function TaskBoard({ tasks }: { tasks: Task[] }) {
                   No tasks
                 </p>
               )}
-            </motion.div>
+            </m.div>
           </div>
         );
       })}

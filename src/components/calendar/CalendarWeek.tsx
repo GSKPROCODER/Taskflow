@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { staggerContainer, staggerItem } from "@/lib/motion";
 import { calendarEvents, type CalendarEvent } from "@/lib/mock-data";
@@ -46,7 +46,7 @@ export function CalendarWeek() {
         </div>
 
         {/* Hour rows */}
-        <motion.div variants={staggerContainer} initial="hidden" animate="show">
+        <m.div variants={staggerContainer} initial="hidden" animate="show">
           {HOURS.map((h) => (
             <div
               key={h}
@@ -65,7 +65,7 @@ export function CalendarWeek() {
                     className="relative min-h-[64px] border-l border-border p-1"
                   >
                     {events.map((e) => (
-                      <motion.div
+                      <m.div
                         key={e.id}
                         variants={staggerItem}
                         className={cn(
@@ -75,14 +75,14 @@ export function CalendarWeek() {
                       >
                         <p className="font-medium">{hourLabel(e.startHour)}</p>
                         <p className="line-clamp-2">{e.title}</p>
-                      </motion.div>
+                      </m.div>
                     ))}
                   </div>
                 );
               })}
             </div>
           ))}
-        </motion.div>
+        </m.div>
       </div>
     </div>
   );

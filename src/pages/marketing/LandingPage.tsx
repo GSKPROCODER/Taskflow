@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   Hexagon,
@@ -55,7 +55,7 @@ function Section({
   className?: string;
 }) {
   return (
-    <motion.section
+    <m.section
       variants={fadeUp}
       initial="hidden"
       whileInView="show"
@@ -63,7 +63,7 @@ function Section({
       className={className}
     >
       {children}
-    </motion.section>
+    </m.section>
   );
 }
 
@@ -127,7 +127,7 @@ export function LandingPage() {
         </div>
 
         {/* Product mock */}
-        <motion.div
+        <m.div
           variants={fadeUp}
           className="mx-auto mt-14 max-w-5xl overflow-hidden rounded-2xl border border-border bg-background shadow-2xl"
         >
@@ -162,7 +162,7 @@ export function LandingPage() {
               ),
             )}
           </div>
-        </motion.div>
+        </m.div>
       </Section>
 
       {/* Logo cloud */}
@@ -190,7 +190,7 @@ export function LandingPage() {
             enterprise bloat.
           </p>
         </div>
-        <motion.div
+        <m.div
           variants={staggerContainer}
           initial="hidden"
           whileInView="show"
@@ -198,7 +198,7 @@ export function LandingPage() {
           className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
         >
           {FEATURES.map((f) => (
-            <motion.div
+            <m.div
               key={f.title}
               variants={staggerItem}
               className="rounded-2xl border border-border bg-background p-6"
@@ -208,9 +208,9 @@ export function LandingPage() {
               </span>
               <h3 className="mt-4 font-semibold">{f.title}</h3>
               <p className="mt-2 text-sm text-muted-foreground">{f.body}</p>
-            </motion.div>
+            </m.div>
           ))}
-        </motion.div>
+        </m.div>
       </Section>
 
       {/* CTA */}

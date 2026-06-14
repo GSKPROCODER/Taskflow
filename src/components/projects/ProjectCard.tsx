@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { FolderKanban, MoreHorizontal, CheckCircle2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -24,7 +24,7 @@ export function ProjectCard({ project }: { project: Project }) {
   ];
 
   return (
-    <motion.button
+    <m.button
       type="button"
       variants={staggerItem}
       {...hoverLift}
@@ -62,6 +62,6 @@ export function ProjectCard({ project }: { project: Project }) {
           {project.status}
         </Badge>
       </div>
-    </motion.button>
+    </m.button>
   );
 }

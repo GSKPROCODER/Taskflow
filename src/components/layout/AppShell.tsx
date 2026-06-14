@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Outlet, useLocation } from "react-router-dom";
 import { Sidebar } from "./Sidebar";
 import { TopBar } from "./TopNav";
@@ -17,7 +17,7 @@ export function AppShell() {
       <div className="flex min-w-0 flex-1 flex-col">
         <TopBar />
         <main className="flex-1 overflow-y-auto bg-background">
-          <motion.div
+          <m.div
             key={location.pathname}
             variants={fadeUp}
             initial="hidden"
@@ -25,7 +25,7 @@ export function AppShell() {
             className="mx-auto max-w-[1280px] p-6 md:p-8"
           >
             <Outlet />
-          </motion.div>
+          </m.div>
         </main>
       </div>
     </div>

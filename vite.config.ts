@@ -13,6 +13,28 @@ export default defineConfig({
   },
   build: {
     outDir: "dist",
+    target: "esnext",
+    modulePreload: { polyfill: true },
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "vendor-react": ["react", "react-dom", "react-router-dom"],
+          "vendor-query": ["@tanstack/react-query"],
+          "vendor-motion": ["framer-motion"],
+          "vendor-supabase": ["@supabase/supabase-js"],
+          "vendor-radix": [
+            "@radix-ui/react-avatar",
+            "@radix-ui/react-dialog",
+            "@radix-ui/react-dropdown-menu",
+            "@radix-ui/react-label",
+            "@radix-ui/react-select",
+            "@radix-ui/react-separator",
+            "@radix-ui/react-slot",
+          ],
+          "vendor-forms": ["react-hook-form", "zod", "@hookform/resolvers"],
+        },
+      },
+    },
   },
   server: {
     port: 5173,

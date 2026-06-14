@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { CheckCheck, Settings2, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { popIn } from "@/lib/motion";
@@ -52,7 +52,7 @@ export function NotificationsPanel() {
   const unread = notifications.filter((n) => n.unread).length;
 
   return (
-    <motion.div
+    <m.div
       variants={popIn}
       initial="hidden"
       animate="show"
@@ -109,6 +109,6 @@ export function NotificationsPanel() {
       >
         See More <ChevronRight className="size-4" />
       </Link>
-    </motion.div>
+    </m.div>
   );
 }

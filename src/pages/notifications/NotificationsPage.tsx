@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { CheckCheck } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Card } from "@/components/ui/card";
@@ -26,14 +26,14 @@ export function NotificationsPage() {
       />
 
       <Card>
-        <motion.ul
+        <m.ul
           variants={staggerContainer}
           initial="hidden"
           animate="show"
           className="divide-y divide-border"
         >
           {notifications.map((n) => (
-            <motion.li
+            <m.li
               key={n.id}
               variants={staggerItem}
               className="flex items-start gap-3 p-5"
@@ -67,9 +67,9 @@ export function NotificationsPage() {
               {n.unread && (
                 <span className="mt-1.5 size-2 shrink-0 rounded-full bg-emerald-500" />
               )}
-            </motion.li>
+            </m.li>
           ))}
-        </motion.ul>
+        </m.ul>
       </Card>
     </div>
   );

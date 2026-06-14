@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { CalendarDays, MoreHorizontal } from "lucide-react";
 import { PriorityBadge } from "./PriorityBadge";
@@ -18,7 +18,7 @@ export function TaskCard({ task }: { task: Task }) {
   const people = assignee ? [assignee.name, "Priya Shah", "Marcus Lee"] : [];
 
   return (
-    <motion.button
+    <m.button
       type="button"
       variants={staggerItem}
       {...hoverLift}
@@ -49,6 +49,6 @@ export function TaskCard({ task }: { task: Task }) {
         </span>
         <AvatarStack names={people} max={3} />
       </div>
-    </motion.button>
+    </m.button>
   );
 }

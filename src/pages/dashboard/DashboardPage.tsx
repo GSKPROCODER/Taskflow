@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import {
   ListTodo,
   Loader2,
@@ -36,7 +36,7 @@ export function DashboardPage() {
         }
       />
 
-      <motion.div
+      <m.div
         variants={staggerContainer}
         initial="hidden"
         animate="show"
@@ -61,7 +61,7 @@ export function DashboardPage() {
           icon={CheckCircle2}
           tone="bg-emerald-100 text-emerald-700"
         />
-      </motion.div>
+      </m.div>
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">

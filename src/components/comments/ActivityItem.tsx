@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { avatarColor, initials } from "@/lib/ui";
@@ -14,19 +14,19 @@ export function ActivityItem({ comment }: { comment: Comment }) {
 
   if (comment.type === "system_log") {
     return (
-      <motion.div
+      <m.div
         variants={staggerItem}
         className="flex items-center gap-2 py-1.5 pl-1 text-xs text-muted-foreground"
       >
         <Activity className="size-3.5" />
         <span>{comment.content}</span>
         <span className="text-muted-foreground/60">· {when}</span>
-      </motion.div>
+      </m.div>
     );
   }
 
   return (
-    <motion.div variants={staggerItem} className="flex gap-3">
+    <m.div variants={staggerItem} className="flex gap-3">
       <div
         className={cn(
           "flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-medium text-white",
@@ -44,6 +44,6 @@ export function ActivityItem({ comment }: { comment: Comment }) {
           {comment.content}
         </p>
       </div>
-    </motion.div>
+    </m.div>
   );
 }

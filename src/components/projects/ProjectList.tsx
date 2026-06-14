@@ -1,11 +1,11 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { ProjectCard } from "./ProjectCard";
 import { staggerContainer } from "@/lib/motion";
 import type { Project } from "@/types";
 
 export function ProjectList({ projects }: { projects: Project[] }) {
   return (
-    <motion.div
+    <m.div
       variants={staggerContainer}
       initial="hidden"
       animate="show"
@@ -14,6 +14,6 @@ export function ProjectList({ projects }: { projects: Project[] }) {
       {projects.map((project) => (
         <ProjectCard key={project.id} project={project} />
       ))}
-    </motion.div>
+    </m.div>
   );
 }

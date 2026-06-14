@@ -1,11 +1,31 @@
-import axios from "axios";
+const BASE = "/api/v1";
 
-/**
- * Typed HTTP client for the TaskFlow API (PRD §8, §9).
- * Base URL points at the Hono API mounted under /api/v1.
- * TODO: attach the Supabase JWT via a request interceptor.
- */
-export const apiClient = axios.create({
-  baseURL: "/api/v1",
-  headers: { "Content-Type": "application/json" },
-});
+type RequestOptions = Omit<RequestInit, "body"> & { json?: unknown };
+
+async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
+  const { json, headers, ...rest } = options;
+  const res = await fetch(`${BASE}${path}`, {
+    ...rest,
+    headers: {
+      "Content-Type": "application/json",
+      ...headers,
+    },
+    body: json !== undefined ? JSON.stringify(json) : undefined,
+  });
+  if (!res.ok) {
+    const msg = await res.text().catch(() => res.statusText);
+    throw new Error(`${res.status}: ${msg}`);
+  }
+  return res.json() as Promise<T>;
+}
+
+export const apiClient = {
+  get: <T>(path: string, init?: RequestInit) =>
+    request<T>(path, { method: "GET", ...init }),
+  post: <T>(path: string, json: unknown, init?: RequestInit) =>
+    request<T>(path, { method: "POST", json, ...init }),
+  patch: <T>(path: string, json: unknown, init?: RequestInit) =>
+    request<T>(path, { method: "PATCH", json, ...init }),
+  delete: <T>(path: string, init?: RequestInit) =>
+    request<T>(path, { method: "DELETE", ...init }),
+};

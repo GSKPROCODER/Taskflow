@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { staggerItem } from "@/lib/motion";
@@ -18,7 +18,7 @@ export function StatCard({
   tone?: string;
 }) {
   return (
-    <motion.div variants={staggerItem}>
+    <m.div variants={staggerItem}>
       <Card className="p-5">
         <div className="flex items-center justify-between">
           <span
@@ -38,6 +38,6 @@ export function StatCard({
         <p className="mt-4 text-2xl font-semibold tracking-tight">{value}</p>
         <p className="mt-1 text-sm text-muted-foreground">{label}</p>
       </Card>
-    </motion.div>
+    </m.div>
   );
 }

@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { ActivityItem } from "./ActivityItem";
 import { staggerContainer } from "@/lib/motion";
 import type { Comment } from "@/types";
@@ -13,7 +13,7 @@ export function CommentFeed({ comments }: { comments: Comment[] }) {
   }
 
   return (
-    <motion.div
+    <m.div
       variants={staggerContainer}
       initial="hidden"
       animate="show"
@@ -22,6 +22,6 @@ export function CommentFeed({ comments }: { comments: Comment[] }) {
       {comments.map((c) => (
         <ActivityItem key={c.id} comment={c} />
       ))}
-    </motion.div>
+    </m.div>
   );
 }
