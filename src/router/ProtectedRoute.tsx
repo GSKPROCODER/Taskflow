@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Outlet } from "react-router-dom";
 
 /**
@@ -8,3 +9,32 @@ import { Outlet } from "react-router-dom";
 export function ProtectedRoute() {
   return <Outlet />;
 }
+=======
+import { Navigate } from "react-router-dom";
+import { ReactNode } from "react";
+
+import { useAuthStore } from "../store/authStore";
+
+interface ProtectedRouteProps {
+  children: ReactNode;
+}
+
+export default function ProtectedRoute({
+  children,
+}: ProtectedRouteProps) {
+  const token = useAuthStore(
+    (state) => state.token
+  );
+
+  if (!token) {
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
+  }
+
+  return <>{children}</>;
+}
+>>>>>>> faiz
