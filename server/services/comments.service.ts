@@ -1,10 +1,16 @@
 import { supabaseAdmin } from "../db/client";
 import { ForbiddenError, NotFoundError } from "../lib/errors";
+import { decodeCursor, encodeCursor } from "../lib/pagination";
 import type { Comment } from "../../src/types";
 import type {
   CreateCommentInput,
   UpdateCommentInput,
 } from "../validators/comment.schema";
+
+export interface CursorResult<T> {
+  data: T[];
+  nextCursor: string | null;
+}
 
 // Comment business logic (PRD §5.4, Phase 4).
 
@@ -34,20 +40,46 @@ async function findCommentOrFail(id: string): Promise<Comment> {
 // ── Service methods ───────────────────────────────────────────────────────────
 
 /**
- * Fetch all comments (user comments + system_log entries) for a task,
+ * Fetch comments (user comments + system_log entries) for a task, cursor-paginated,
  * ordered chronologically for the activity feed.
+ *
+ * Pass the previous page's `nextCursor` to fetch the next page. `created_at`
+ * alone isn't unique (see 0005_pagination.sql), so the cursor also carries
+ * `id` as a tiebreaker: WHERE (created_at, id) > (cursor.createdAt, cursor.id).
  */
-export async function listByTask(taskId: string): Promise<Comment[]> {
+export async function listByTask(
+  taskId: string,
+  cursor?: string,
+  limit = 20,
+): Promise<CursorResult<Comment>> {
   await findTaskOrFail(taskId);
 
-  const { data, error } = await supabaseAdmin
+  let query = supabaseAdmin
     .from("comments")
     .select("*")
     .eq("task_id", taskId)
-    .order("created_at", { ascending: true });
+    .order("created_at", { ascending: true })
+    .order("id", { ascending: true })
+    .limit(limit);
 
+  if (cursor) {
+    const { createdAt, id } = decodeCursor(cursor);
+    query = query.or(
+      `created_at.gt.${createdAt},and(created_at.eq.${createdAt},id.gt.${id})`,
+    );
+  }
+
+  const { data, error } = await query;
   if (error) throw new Error(error.message);
-  return (data ?? []) as Comment[];
+
+  const rows = (data ?? []) as Comment[];
+  const last = rows[rows.length - 1];
+  // Only offer a nextCursor if this page was full — a partial page means we
+  // reached the end of the feed.
+  const nextCursor =
+    rows.length === limit && last ? encodeCursor(last) : null;
+
+  return { data: rows, nextCursor };
 }
 
 /**

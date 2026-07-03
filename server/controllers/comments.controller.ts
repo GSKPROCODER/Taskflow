@@ -4,13 +4,21 @@ import {
   createCommentSchema,
   updateCommentSchema,
 } from "../validators/comment.schema";
+import { cursorPaginationSchema } from "../lib/pagination";
 import { ValidationError } from "../lib/errors";
 
 // Comment controllers (PRD §8.4). Thin: validate → service → respond.
 
 export const listByTask = async (c: Context) => {
   const taskId = c.req.param("id")!;
-  const comments = await commentsService.listByTask(taskId);
+  const result = cursorPaginationSchema.safeParse(c.req.query());
+  if (!result.success) {
+    throw new ValidationError(
+      result.error.issues[0]?.message ?? "Invalid pagination params",
+    );
+  }
+  const { cursor, limit } = result.data;
+  const comments = await commentsService.listByTask(taskId, cursor, limit);
   return c.json(comments);
 };
 

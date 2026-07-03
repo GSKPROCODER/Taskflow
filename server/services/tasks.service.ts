@@ -80,7 +80,8 @@ export async function listByProject(projectId: string): Promise<Task[]> {
     .from("tasks")
     .select("*")
     .eq("project_id", projectId)
-    .order("created_at", { ascending: true });
+    .order("created_at", { ascending: true })
+    .limit(200); // safety ceiling — Kanban board shows all columns at once, can't page
 
   if (error) throw new Error(error.message);
   return (data ?? []) as Task[];

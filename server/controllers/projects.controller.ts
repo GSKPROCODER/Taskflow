@@ -4,12 +4,20 @@ import {
   createProjectSchema,
   updateProjectSchema,
 } from "../validators/project.schema";
+import { offsetPaginationSchema } from "../lib/pagination";
 import { ValidationError } from "../lib/errors";
 
 // Project controllers (PRD §8.2). Thin: validate → service → respond.
 
 export const list = async (c: Context) => {
-  const projects = await projectsService.list();
+  const result = offsetPaginationSchema.safeParse(c.req.query());
+  if (!result.success) {
+    throw new ValidationError(
+      result.error.issues[0]?.message ?? "Invalid pagination params",
+    );
+  }
+  const { page, limit } = result.data;
+  const projects = await projectsService.list(page, limit);
   return c.json(projects);
 };
 

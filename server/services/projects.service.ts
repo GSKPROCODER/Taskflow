@@ -1,10 +1,18 @@
 import { supabaseAdmin } from "../db/client";
 import { NotFoundError } from "../lib/errors";
+import { toRange } from "../lib/pagination";
 import type { Project } from "../../src/types";
 import type {
   CreateProjectInput,
   UpdateProjectInput,
 } from "../validators/project.schema";
+
+export interface PaginatedResult<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+}
 
 // Project business logic (PRD §5.2, Phase 2).
 // All DB access lives here — controllers stay thin.
@@ -26,18 +34,24 @@ async function findOrFail(id: string): Promise<Project> {
 // ── Service methods ───────────────────────────────────────────────────────────
 
 /**
- * List all projects visible to the authenticated user.
+ * List all projects visible to the authenticated user, offset-paginated.
  * RLS (0002_rls_policies.sql) limits results to authenticated users.
  * Returns newest-first so the sidebar always shows the most recent projects.
  */
-export async function list(): Promise<Project[]> {
-  const { data, error } = await supabaseAdmin
+export async function list(
+  page: number,
+  limit: number,
+): Promise<PaginatedResult<Project>> {
+  const { from, to } = toRange(page, limit);
+
+  const { data, error, count } = await supabaseAdmin
     .from("projects")
-    .select("*")
-    .order("created_at", { ascending: false });
+    .select("*", { count: "exact" })
+    .order("created_at", { ascending: false })
+    .range(from, to);
 
   if (error) throw new Error(error.message);
-  return (data ?? []) as Project[];
+  return { data: (data ?? []) as Project[], total: count ?? 0, page, limit };
 }
 
 /**
