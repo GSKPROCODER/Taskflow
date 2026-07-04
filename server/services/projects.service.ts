@@ -1,18 +1,11 @@
 import { supabaseAdmin } from "../db/client";
 import { NotFoundError } from "../lib/errors";
-import { toRange } from "../lib/pagination";
+import { toRange, type PaginatedResult } from "../lib/pagination";
 import type { Project } from "../../src/types";
 import type {
   CreateProjectInput,
   UpdateProjectInput,
 } from "../validators/project.schema";
-
-export interface PaginatedResult<T> {
-  data: T[];
-  total: number;
-  page: number;
-  limit: number;
-}
 
 // Project business logic (PRD §5.2, Phase 2).
 // All DB access lives here — controllers stay thin.

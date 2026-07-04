@@ -120,11 +120,15 @@ All routes require `Authorization: Bearer <token>` **except** `/auth/login`,
 (§6). Health: `GET /health` → `{ status, timestamp }`.
 
 - **Auth:** `POST /auth/signup`, `POST /auth/login`, `POST /auth/logout`, `GET /auth/me`
-- **Projects:** `GET /projects`, `POST /projects` (team_lead), `PUT /projects/:id`,
-  `PATCH /projects/:id/archive`
-- **Tasks:** `GET /projects/:id/tasks`, `POST /projects/:id/tasks` (team_lead),
-  `PUT /tasks/:id`, `PATCH /tasks/:id/status`, `DELETE /tasks/:id` (team_lead)
-- **Comments:** `GET /tasks/:id/comments`, `POST /tasks/:id/comments`, `PUT /comments/:id`
+- **Projects:** `GET /projects` (offset-paginated: `?page&limit`), `POST /projects`
+  (team_lead), `PUT /projects/:id`, `PATCH /projects/:id/archive`
+- **Tasks:** `GET /tasks` (offset-paginated, all projects — dashboard stats),
+  `GET /tasks/mine` (offset-paginated, scoped to the authenticated user),
+  `GET /tasks/:id`, `GET /projects/:id/tasks` (capped list for the Kanban board,
+  no page UI), `POST /projects/:id/tasks` (team_lead), `PUT /tasks/:id`,
+  `PATCH /tasks/:id/status`, `DELETE /tasks/:id` (team_lead)
+- **Comments:** `GET /tasks/:id/comments` (cursor-paginated: `?cursor&limit`),
+  `POST /tasks/:id/comments`, `PUT /comments/:id`
 
 ### Request flow
 

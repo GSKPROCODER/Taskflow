@@ -1,5 +1,6 @@
 import { supabaseAdmin } from "../db/client";
 import { ForbiddenError, NotFoundError, ValidationError } from "../lib/errors";
+import { toRange, type PaginatedResult } from "../lib/pagination";
 import type { Task, TaskStatus, User } from "../../src/types";
 import type {
   CreateTaskInput,
@@ -68,6 +69,54 @@ async function findProjectOrFail(projectId: string): Promise<void> {
 }
 
 // ── Service methods ───────────────────────────────────────────────────────────
+
+/** Fetch a single task by id; throw NotFoundError if absent. */
+export async function getById(id: string): Promise<Task> {
+  return findOrFail(id);
+}
+
+/**
+ * List tasks across every project, offset-paginated.
+ * Powers dashboard-wide stats (total/in-progress/testing/done counts) — the
+ * one view that genuinely needs an unscoped task list rather than per-project.
+ */
+export async function listAll(
+  page: number,
+  limit: number,
+): Promise<PaginatedResult<Task>> {
+  const { from, to } = toRange(page, limit);
+
+  const { data, error, count } = await supabaseAdmin
+    .from("tasks")
+    .select("*", { count: "exact" })
+    .order("created_at", { ascending: false })
+    .range(from, to);
+
+  if (error) throw new Error(error.message);
+  return { data: (data ?? []) as Task[], total: count ?? 0, page, limit };
+}
+
+/**
+ * List tasks assigned to a user across all projects, offset-paginated.
+ * Powers the "My Tasks" view. Uses idx_tasks_assignee_status.
+ */
+export async function listByAssignee(
+  userId: string,
+  page: number,
+  limit: number,
+): Promise<PaginatedResult<Task>> {
+  const { from, to } = toRange(page, limit);
+
+  const { data, error, count } = await supabaseAdmin
+    .from("tasks")
+    .select("*", { count: "exact" })
+    .eq("assignee_id", userId)
+    .order("created_at", { ascending: false })
+    .range(from, to);
+
+  if (error) throw new Error(error.message);
+  return { data: (data ?? []) as Task[], total: count ?? 0, page, limit };
+}
 
 /**
  * List all tasks belonging to a project.

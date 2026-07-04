@@ -11,6 +11,13 @@ export const offsetPaginationSchema = z.object({
 
 export type OffsetPagination = z.infer<typeof offsetPaginationSchema>;
 
+export interface PaginatedResult<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
 /** Convert a 1-indexed page + limit into a Supabase .range(from, to) pair. */
 export function toRange(
   page: number,

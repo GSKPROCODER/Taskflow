@@ -10,6 +10,9 @@ import { requireRole } from "../middleware/rbac.middleware";
 // Delete is team_lead only.
 const tasks = new Hono();
 
+tasks.get("/", authMiddleware, tasksController.list);
+tasks.get("/mine", authMiddleware, tasksController.listMine);
+tasks.get("/:id", authMiddleware, tasksController.getById);
 tasks.put("/:id", authMiddleware, tasksController.update);
 tasks.patch("/:id/status", authMiddleware, tasksController.updateStatus);
 tasks.delete(
