@@ -10,6 +10,11 @@ export const listByProject = async (c: Context) => {
   return c.json(await tasksService.listByProject(projectId));
 };
 
+export const getById = async (c: Context) => {
+  const taskId = c.req.param("id") as string;
+  return c.json(await tasksService.getById(taskId));
+};
+
 export const create = async (c: Context) => {
   const projectId = c.req.param("id") as string;
   const user = c.get("user");

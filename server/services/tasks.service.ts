@@ -15,6 +15,20 @@ export async function listByProject(projectId: string) {
   return data;
 }
 
+export async function getById(taskId: string) {
+  const { data, error } = await supabaseAdmin
+    .from("tasks")
+    .select("*")
+    .eq("id", taskId)
+    .single();
+
+  if (error) {
+    if (error.code === "PGRST116") throw new NotFoundError("Task not found");
+    throw new AppError("Failed to fetch task", "INTERNAL_ERROR", 500);
+  }
+  return data;
+}
+
 export async function create(projectId: string, input: CreateTaskInput, userId: string) {
   const { data, error } = await supabaseAdmin
     .from("tasks")

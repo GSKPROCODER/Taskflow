@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/api/client";
-import { tasksForUser, taskById } from "@/lib/mock-data";
+import { tasksForUser } from "@/lib/mock-data";
 import type { Task } from "@/types";
 
 /**
@@ -31,12 +31,17 @@ export function useMyTasks(userId: string) {
   } as const;
 }
 
+async function fetchTask(id: string): Promise<Task> {
+  const { data } = await apiClient.get(`/tasks/${id}`);
+  return data;
+}
+
 export function useTask(id: string | undefined) {
-  // We can fetch a single task if needed: GET /tasks/:id
-  return {
-    data: id ? taskById(id) : undefined,
-    isLoading: false,
-  } as const;
+  return useQuery({
+    queryKey: ["task", id],
+    queryFn: () => fetchTask(id!),
+    enabled: !!id,
+  });
 }
 
 export function useCreateTask(projectId: string) {

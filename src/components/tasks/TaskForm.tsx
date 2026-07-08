@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+// Removed unused z import
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,13 +26,9 @@ import {
 } from "@/components/ui/select";
 import { useCreateTask } from "@/hooks/useTasks";
 
-const schema = z.object({
-  title: z.string().min(1, "Title is required").max(300),
-  description: z.string().optional(),
-  priority: z.enum(["low", "medium", "high", "critical"]),
-  due_date: z.string().optional(),
-});
-type FormValues = z.infer<typeof schema>;
+import { createTaskSchema, type CreateTaskInput } from "../../../server/validators/task.schema";
+
+type FormValues = CreateTaskInput;
 
 /** Create-task dialog (UI only — logs the payload for now). */
 export function TaskForm({ trigger, projectId }: { trigger?: React.ReactNode, projectId: string }) {
@@ -45,7 +41,7 @@ export function TaskForm({ trigger, projectId }: { trigger?: React.ReactNode, pr
     reset,
     formState: { errors },
   } = useForm<FormValues>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(createTaskSchema),
     defaultValues: { priority: "medium" },
   });
 
@@ -88,10 +84,14 @@ export function TaskForm({ trigger, projectId }: { trigger?: React.ReactNode, pr
             <Input
               id="title"
               placeholder="e.g. Build auth flow"
+              className={errors.title ? "border-destructive focus-visible:ring-destructive" : ""}
               {...register("title")}
             />
             {errors.title && (
-              <p className="text-xs text-destructive">{errors.title.message}</p>
+              <p className="flex items-center gap-1 text-[13px] font-medium text-destructive mt-1">
+                <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-destructive/10">!</span>
+                {errors.title.message}
+              </p>
             )}
           </div>
           <div className="grid gap-1.5">

@@ -12,6 +12,8 @@ import { MyTasksPage } from "@/pages/tasks/MyTasksPage";
 import { CalendarPage } from "@/pages/calendar/CalendarPage";
 import { NotificationsPage } from "@/pages/notifications/NotificationsPage";
 import { SettingsPage } from "@/pages/settings/SettingsPage";
+import { TeamPage } from "@/pages/team/TeamPage";
+import { ReportsPage } from "@/pages/reports/ReportsPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 
 // Route table (PRD §9). Public marketing + auth; app routes nested in AppShell.
@@ -31,6 +33,8 @@ export const router = createBrowserRouter([
           { path: "/tasks/:id", element: <TaskDetailPage /> },
           { path: "/my-tasks", element: <MyTasksPage /> },
           { path: "/calendar", element: <CalendarPage /> },
+          { path: "/team", element: <TeamPage /> },
+          { path: "/reports", element: <ReportsPage /> },
           { path: "/notifications", element: <NotificationsPage /> },
           { path: "/settings", element: <SettingsPage /> },
         ],

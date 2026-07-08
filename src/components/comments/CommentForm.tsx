@@ -1,30 +1,45 @@
-import { useState } from "react";
-import { SendHorizontal } from "lucide-react";
+// Removed unused useState import
+import { SendHorizontal, Loader2 } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useCreateComment } from "@/hooks/useComments";
+import { createCommentSchema, type CreateCommentInput } from "../../../server/validators/comment.schema";
 
-/** Add-comment composer (UI only — clears on submit for this pass). */
-export function CommentForm() {
-  const [value, setValue] = useState("");
+/** Add-comment composer. */
+export function CommentForm({ taskId }: { taskId: string }) {
+  const { register, handleSubmit, reset, watch, formState: { errors } } = useForm<CreateCommentInput>({
+    resolver: zodResolver(createCommentSchema),
+    defaultValues: { content: "" }
+  });
+  
+  const content = watch("content");
+  const createComment = useCreateComment(taskId);
 
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!value.trim()) return;
-    console.info("add comment", value);
-    setValue("");
+  const onSubmit = (values: CreateCommentInput) => {
+    createComment.mutate(values, {
+      onSuccess: () => reset()
+    });
   };
 
   return (
-    <form onSubmit={submit} className="flex flex-col gap-2">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2 relative">
       <Textarea
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
         placeholder="Write a comment…"
-        className="min-h-[72px]"
+        className={errors.content ? "border-destructive focus-visible:ring-destructive min-h-[72px]" : "min-h-[72px]"}
+        {...register("content")}
       />
+      {errors.content && (
+        <p className="flex items-center gap-1 text-[13px] font-medium text-destructive mt-1">
+          <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-destructive/10">!</span>
+          {errors.content.message}
+        </p>
+      )}
       <div className="flex justify-end">
-        <Button type="submit" disabled={!value.trim()}>
-          <SendHorizontal /> Comment
+        <Button type="submit" disabled={!content?.trim() || createComment.isPending}>
+          {createComment.isPending ? <Loader2 className="animate-spin" /> : <SendHorizontal />} 
+          Comment
         </Button>
       </div>
     </form>

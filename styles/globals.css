@@ -38,42 +38,42 @@
 }
 
 :root {
-  --radius: 0.75rem;
+  --radius: 1rem;
 
   /* App surfaces */
-  --background: oklch(0.985 0 0);
-  --foreground: oklch(0.205 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.205 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.205 0 0);
+  --background: #F8F9FA; /* Light gray/slate-50 background for main content */
+  --foreground: #0F172A;
+  --card: #FFFFFF;
+  --card-foreground: #0F172A;
+  --popover: #FFFFFF;
+  --popover-foreground: #0F172A;
 
-  /* Indigo/violet brand primary (matches FourAxis / Axora / Notifications) */
-  --primary: oklch(0.52 0.236 277);
-  --primary-foreground: oklch(0.985 0 0);
-  --brand: oklch(0.52 0.236 277);
-  --brand-foreground: oklch(0.985 0 0);
-  --brand-muted: oklch(0.95 0.03 277);
+  /* Brand primary */
+  --primary: #6C4CF1;
+  --primary-foreground: #FFFFFF;
+  --brand: #6C4CF1;
+  --brand-foreground: #FFFFFF;
+  --brand-muted: #F3F0FF;
 
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.967 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --secondary: #F1F5F9;
+  --secondary-foreground: #0F172A;
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
+  --accent: #F8FAFC;
+  --accent-foreground: #0F172A;
 
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
 
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: #E2E8F0;
+  --input: #E2E8F0;
+  --ring: #6C4CF1;
 
   /* Sidebar */
-  --sidebar: oklch(1 0 0);
-  --sidebar-foreground: oklch(0.205 0 0);
-  --sidebar-accent: oklch(0.967 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar: #0B1121; /* Dark navy */
+  --sidebar-foreground: #F8FAFC;
+  --sidebar-accent: #1E293B;
+  --sidebar-accent-foreground: #F8FAFC;
 }
 
 @layer base {
@@ -88,7 +88,8 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+    font-family: 'Inter', sans-serif;
   }
 
   /* Thin, subtle scrollbars to match the clean aesthetic */

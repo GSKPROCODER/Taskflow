@@ -4,8 +4,6 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   Search,
   Bell,
-  Star,
-  MoreHorizontal,
   ChevronDown,
   LogOut,
   User as UserIcon,
@@ -93,28 +91,24 @@ export function TopBar() {
   const navigate = useNavigate();
 
   return (
-    <header className="flex items-center gap-4 border-b border-border bg-card px-6 py-3.5">
+    <header className="sticky top-0 z-40 flex items-center gap-4 border-b border-border bg-white px-6 py-3.5">
       <Breadcrumb items={crumbs} />
 
       <div className="relative ml-auto hidden w-full max-w-sm items-center md:flex">
         <Search className="absolute left-3 size-4 text-muted-foreground" />
         <input
-          placeholder="Search"
-          className="h-9 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          placeholder="Search anything..."
+          className="h-9 w-full rounded-lg border-0 bg-slate-100 pl-9 pr-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-brand/50"
         />
       </div>
 
-      <div className="flex items-center gap-2">
-        <IconButton title="Favorites">
-          <Star className="size-4" />
-        </IconButton>
-
+      <div className="flex items-center gap-4">
         <DropdownMenu open={bellOpen} onOpenChange={setBellOpen}>
           <DropdownMenuTrigger asChild>
             <IconButton title="Notifications" active={bellOpen}>
               <Bell className="size-4" />
               {unreadCount > 0 && (
-                <span className="absolute right-2 top-2 size-2 rounded-full bg-rose-500 ring-2 ring-card" />
+                <span className="absolute right-2 top-2 size-2 rounded-full bg-rose-500 ring-2 ring-white" />
               )}
             </IconButton>
           </DropdownMenuTrigger>
@@ -128,9 +122,6 @@ export function TopBar() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <IconButton title="More">
-          <MoreHorizontal className="size-4" />
-        </IconButton>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -143,7 +134,13 @@ export function TopBar() {
               >
                 {initials(user?.name ?? "U")}
               </span>
-              <ChevronDown className="size-4 text-muted-foreground" />
+              <div className="hidden flex-col items-start text-left md:flex">
+                <span className="text-sm font-semibold leading-tight text-foreground">{user?.name ?? "User"}</span>
+                <span className="text-[11px] font-medium leading-tight text-muted-foreground capitalize">
+                  {user?.role?.replace("_", " ") ?? "Developer"}
+                </span>
+              </div>
+              <ChevronDown className="ml-1 size-4 text-muted-foreground" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

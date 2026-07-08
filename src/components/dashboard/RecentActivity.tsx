@@ -2,18 +2,27 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { avatarColor, initials } from "@/lib/ui";
 import { relativeTime } from "@/lib/format";
-import { notifications, MOCK_NOW } from "@/lib/mock-data";
+import { useDashboardActivity } from "@/hooks/useDashboard";
 
-/** Recent activity widget (PRD FR-DASH-04) — reuses notification feed data. */
+type Activity = {
+  id: string;
+  actor: string;
+  action: string;
+  target: string;
+  created_at: string;
+};
+
+/** Recent activity widget (PRD FR-DASH-04) — renders system_log feed data. */
 export function RecentActivity() {
+  const { data: notifications = [] } = useDashboardActivity();
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>Recent Activity</CardTitle>
-        <a href="#" className="text-sm font-medium text-brand hover:underline">View all</a>
+    <Card className="shadow-sm shadow-slate-200/50 border-border bg-white rounded-[1rem] h-full flex flex-col">
+      <CardHeader className="flex flex-row items-center justify-between border-b border-border/50 bg-white px-6 py-4 rounded-t-[1rem]">
+        <CardTitle className="text-lg font-semibold">Recent Activity</CardTitle>
+        <a href="#" className="text-sm font-medium text-brand hover:text-brand-muted hover:underline">View all</a>
       </CardHeader>
-      <CardContent className="space-y-6">
-        {notifications.slice(0, 5).map((n) => (
+      <CardContent className="space-y-6 flex-1 overflow-y-auto p-6">
+        {notifications.slice(0, 5).map((n: Activity) => (
           <div key={n.id} className="flex justify-between items-start">
             <div className="flex gap-3">
               <div
@@ -35,7 +44,7 @@ export function RecentActivity() {
               </div>
             </div>
             <p className="text-xs text-muted-foreground whitespace-nowrap mt-0.5">
-              {relativeTime(n.created_at, MOCK_NOW)}
+              {relativeTime(n.created_at, new Date())}
             </p>
           </div>
         ))}

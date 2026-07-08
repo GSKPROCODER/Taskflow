@@ -12,7 +12,7 @@ export function AppShell() {
   const location = useLocation();
 
   return (
-    <div className="flex h-screen overflow-hidden bg-card">
+    <div className="flex h-screen overflow-hidden bg-sidebar">
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col">
         <TopBar />
@@ -22,7 +22,7 @@ export function AppShell() {
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="mx-auto max-w-[1280px] p-6 md:p-8"
+            className="mx-auto max-w-[1400px] p-6 lg:p-10"
           >
             <Outlet />
           </motion.div>

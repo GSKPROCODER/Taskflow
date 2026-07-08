@@ -3,9 +3,18 @@ import { STATUS_LABELS, TASK_STATUS_ORDER } from "@/lib/ui";
 import type { Task } from "@/types";
 import { cn } from "@/lib/utils";
 
-/** Status breakdown widget (PRD FR-DASH-02). */
-export function StatusBreakdown({ tasks }: { tasks: Task[] }) {
-  const total = tasks.length || 1;
+export interface DashboardMetrics {
+  totalTasks?: number;
+  inProgress?: number;
+  testing?: number;
+  done?: number;
+  todo?: number;
+  priority?: Record<string, number>;
+  [key: string]: unknown;
+}
+
+export function TaskOverview({ tasks, metrics }: { tasks?: Task[], metrics?: DashboardMetrics }) {
+  const total = metrics?.totalTasks || tasks?.length || 1;
   const radius = 40;
   const circumference = 2 * Math.PI * radius;
   let currentOffset = 0;
@@ -31,15 +40,18 @@ export function StatusBreakdown({ tasks }: { tasks: Task[] }) {
   };
 
   return (
-    <Card className="flex flex-col h-full">
-      <CardHeader className="pb-2">
-        <CardTitle>Tasks by Priority</CardTitle>
+    <Card className="flex flex-col h-full shadow-sm shadow-slate-200/50 border-border bg-white rounded-[1rem]">
+      <CardHeader className="pb-2 flex flex-row items-center justify-between border-b border-border/50 bg-white px-6 py-4 rounded-t-[1rem]">
+        <CardTitle>Task Overview</CardTitle>
+        <span className="text-sm font-medium text-brand hover:text-brand-muted hover:underline cursor-pointer">View all</span>
       </CardHeader>
-      <CardContent className="flex items-center justify-between flex-1">
-        <div className="relative flex items-center justify-center h-40 w-40">
+      <CardContent className="flex items-center justify-between flex-1 p-6">
+        <div className="relative flex items-center justify-center h-48 w-48">
           <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
             {TASK_STATUS_ORDER.map((status) => {
-              const count = tasks.filter((t) => t.status === status).length;
+              const count = metrics 
+                ? (metrics as Record<string, number>)[status === "in_progress" ? "inProgress" : status] ?? 0
+                : tasks?.filter((t) => t.status === status).length ?? 0;
               if (count === 0) return null;
               
               const pct = count / total;
@@ -62,15 +74,26 @@ export function StatusBreakdown({ tasks }: { tasks: Task[] }) {
               );
             })}
           </svg>
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+            <span className="text-3xl font-bold text-foreground">{metrics?.totalTasks ?? tasks?.length ?? 0}</span>
+            <span className="text-sm font-medium text-muted-foreground mt-0.5">Total</span>
+          </div>
         </div>
-        <div className="flex flex-col space-y-3 mr-4">
+        <div className="flex flex-col space-y-4 mr-6">
           {TASK_STATUS_ORDER.map((status) => {
-            const count = tasks.filter((t) => t.status === status).length;
+            const count = metrics 
+              ? (metrics as Record<string, number>)[status === "in_progress" ? "inProgress" : status] ?? 0
+              : tasks?.filter((t) => t.status === status).length ?? 0;
             return (
               <div key={status} className="flex items-center text-sm">
-                <span className={cn("w-2.5 h-2.5 rounded-full mr-2", getLegendColor(status))} />
-                <span className="text-muted-foreground w-20">{STATUS_LABELS[status]}</span>
-                <span className="font-semibold">{count}</span>
+                <span className={cn("w-2.5 h-2.5 rounded-full mr-3", getLegendColor(status))} />
+                <span className="text-muted-foreground font-medium w-24">{STATUS_LABELS[status]}</span>
+                <div className="flex items-center justify-end w-16">
+                  <span className="font-semibold">{count}</span>
+                  <span className="text-xs text-muted-foreground ml-2 w-8 text-right">
+                    {total > 0 ? Math.round((count / total) * 100) : 0}%
+                  </span>
+                </div>
               </div>
             );
           })}
