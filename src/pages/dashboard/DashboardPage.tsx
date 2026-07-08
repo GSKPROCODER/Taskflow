@@ -5,6 +5,7 @@ import {
   CircleDot,
   CheckCircle2,
   Filter,
+  Folder,
 } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { StatCard } from "@/components/dashboard/StatCard";
@@ -14,12 +15,13 @@ import { MyTasksWidget } from "@/components/dashboard/MyTasksWidget";
 import { Button } from "@/components/ui/button";
 import { staggerContainer } from "@/lib/motion";
 import { useAuth } from "@/hooks/useAuth";
-import { useTasks } from "@/hooks/useTasks";
-import { tasksForUser } from "@/lib/mock-data";
+import { useProjects } from "@/hooks/useProjects";
+import { tasksForUser, tasks as mockTasks } from "@/lib/mock-data";
 
 export function DashboardPage() {
   const { user } = useAuth();
-  const { data: tasks } = useTasks();
+  const { data: projects = [] } = useProjects();
+  const tasks = mockTasks; // Use mock data for dashboard tasks until API is ready
   const myTasks = tasksForUser(user?.id ?? "u-1");
 
   const count = (s: string) => tasks.filter((t) => t.status === s).length;
@@ -40,26 +42,42 @@ export function DashboardPage() {
         variants={staggerContainer}
         initial="hidden"
         animate="show"
-        className="grid grid-cols-2 gap-4 lg:grid-cols-4"
+        className="grid grid-cols-2 gap-4 lg:grid-cols-5"
       >
-        <StatCard label="Total tasks" value={tasks.length} icon={ListTodo} />
-        <StatCard
-          label="In progress"
-          value={count("in_progress")}
-          icon={Loader2}
-          tone="bg-blue-100 text-blue-700"
+        <StatCard 
+          label="Total Projects" 
+          value={projects.length} 
+          icon={Folder} 
+          tone="bg-blue-100 text-blue-700" 
+          delta="+ 2 this month" 
+        />
+        <StatCard 
+          label="Total Tasks" 
+          value={tasks.length} 
+          icon={ListTodo} 
+          tone="bg-purple-100 text-purple-700" 
+          delta="+ 16 this week" 
         />
         <StatCard
-          label="In review"
+          label="In Progress"
+          value={count("in_progress")}
+          icon={Loader2}
+          tone="bg-orange-100 text-orange-700"
+          delta="+ 5 this week"
+        />
+        <StatCard
+          label="Testing"
           value={count("testing")}
           icon={CircleDot}
-          tone="bg-amber-100 text-amber-700"
+          tone="bg-rose-100 text-rose-700"
+          delta="+ 2 this week"
         />
         <StatCard
           label="Completed"
           value={count("done")}
           icon={CheckCircle2}
           tone="bg-emerald-100 text-emerald-700"
+          delta="+ 20 this week"
         />
       </motion.div>
 

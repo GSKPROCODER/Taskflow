@@ -1,49 +1,94 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabase";
-import {
-  tasks as mockTasks,
-  tasksByProject,
-  taskById,
-  tasksForUser,
-} from "@/lib/mock-data";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiClient } from "@/api/client";
+import { tasksForUser, taskById } from "@/lib/mock-data";
 import type { Task } from "@/types";
 
 /**
- * Tasks data (PRD §8.3). Queries Supabase; falls back to demo data when empty
- * or RLS-blocked. Live data takes over automatically once rows exist.
+ * Tasks data (PRD §8.3).
  */
-async function fetchTasks(projectId?: string): Promise<Task[]> {
-  let query = supabase.from("tasks").select("*");
-  if (projectId) query = query.eq("project_id", projectId);
-  const { data, error } = await query;
-  if (error || !data || data.length === 0) {
-    return projectId ? tasksByProject(projectId) : mockTasks;
-  }
-  return data as Task[];
+async function fetchTasks(projectId: string): Promise<Task[]> {
+  const { data } = await apiClient.get(`/projects/${projectId}/tasks`);
+  return data;
 }
 
 export function useTasks(projectId?: string) {
-  const q = useQuery({
-    queryKey: ["tasks", projectId ?? "all"],
-    queryFn: () => fetchTasks(projectId),
+  return useQuery({
+    queryKey: ["tasks", projectId],
+    queryFn: () => fetchTasks(projectId!),
+    enabled: !!projectId,
   });
-  const fallback = projectId ? tasksByProject(projectId) : mockTasks;
-  return { data: q.data ?? fallback, isLoading: q.isLoading } as const;
+}
+
+// Global tasks fetch (requires a different endpoint or querying all projects, 
+// but for MVP, we mostly need tasks by project or user).
+// We'll stub useMyTasks if a global endpoint doesn't exist yet, or adjust as needed.
+export function useMyTasks(userId: string) {
+  // If we need all tasks for a user, we should create a GET /tasks endpoint.
+  // For now, returning empty to be filled if needed, or query all projects' tasks.
+  return {
+    data: tasksForUser(userId),
+    isLoading: false,
+  } as const;
 }
 
 export function useTask(id: string | undefined) {
-  const { data: all } = useTasks();
+  // We can fetch a single task if needed: GET /tasks/:id
   return {
-    data: id ? (all.find((t) => t.id === id) ?? taskById(id)) : undefined,
+    data: id ? taskById(id) : undefined,
     isLoading: false,
   } as const;
 }
 
-export function useMyTasks(userId: string) {
-  const { data: all } = useTasks();
-  const mine = all.filter((t) => t.assignee_id === userId);
-  return {
-    data: mine.length ? mine : tasksForUser(userId),
-    isLoading: false,
-  } as const;
+export function useCreateTask(projectId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (task: Partial<Task>) => {
+      const { data } = await apiClient.post(`/projects/${projectId}/tasks`, task);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks", projectId] });
+    },
+  });
+}
+
+export function useUpdateTask() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ...updates }: Partial<Task> & { id: string }) => {
+      const { data } = await apiClient.put(`/tasks/${id}`, updates);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
+}
+
+export function useUpdateTaskStatus() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, status }: { id: string; status: Task["status"] }) => {
+      const { data } = await apiClient.patch(`/tasks/${id}/status`, { status });
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      // Invalidate comments as system_log was added
+      queryClient.invalidateQueries({ queryKey: ["comments"] });
+    },
+  });
+}
+
+export function useDeleteTask() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { data } = await apiClient.delete(`/tasks/${id}`);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
 }

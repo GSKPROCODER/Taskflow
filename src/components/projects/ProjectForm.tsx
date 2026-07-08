@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useCreateProject } from "@/hooks/useProjects";
 import {
   Dialog,
   DialogTrigger,
@@ -24,7 +25,7 @@ const schema = z.object({
 });
 type FormValues = z.infer<typeof schema>;
 
-/** Create-project dialog (UI only for this pass). */
+/** Create-project dialog. */
 export function ProjectForm({ trigger }: { trigger?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const {
@@ -34,10 +35,19 @@ export function ProjectForm({ trigger }: { trigger?: React.ReactNode }) {
     formState: { errors },
   } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
+  const createProject = useCreateProject();
+
   const onSubmit = (values: FormValues) => {
-    console.info("create project", values);
-    reset();
-    setOpen(false);
+    createProject.mutate(values, {
+      onSuccess: () => {
+        reset();
+        setOpen(false);
+      },
+      onError: (err) => {
+        console.error("Failed to create project", err);
+        // Could show a toast error here
+      }
+    });
   };
 
   return (

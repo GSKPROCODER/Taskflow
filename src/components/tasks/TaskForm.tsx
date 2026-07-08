@@ -24,6 +24,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { useCreateTask } from "@/hooks/useTasks";
 
 const schema = z.object({
   title: z.string().min(1, "Title is required").max(300),
@@ -34,8 +35,9 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 /** Create-task dialog (UI only — logs the payload for now). */
-export function TaskForm({ trigger }: { trigger?: React.ReactNode }) {
+export function TaskForm({ trigger, projectId }: { trigger?: React.ReactNode, projectId: string }) {
   const [open, setOpen] = useState(false);
+  const createTask = useCreateTask(projectId);
   const {
     register,
     handleSubmit,
@@ -48,17 +50,27 @@ export function TaskForm({ trigger }: { trigger?: React.ReactNode }) {
   });
 
   const onSubmit = (values: FormValues) => {
-    // UI pass: persistence lands with the API. Close + reset for now.
-    console.info("create task", values);
-    reset();
-    setOpen(false);
+    createTask.mutate(
+      {
+        title: values.title,
+        description: values.description,
+        priority: values.priority,
+        due_date: values.due_date || undefined,
+      },
+      {
+        onSuccess: () => {
+          reset();
+          setOpen(false);
+        },
+      }
+    );
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {trigger ?? (
-          <Button>
+          <Button disabled={createTask.isPending}>
             <Plus /> New Task
           </Button>
         )}

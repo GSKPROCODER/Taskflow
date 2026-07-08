@@ -25,7 +25,7 @@ import { NotFoundPage } from "@/pages/NotFoundPage";
 export function ProjectDetailPage() {
   const { id } = useParams();
   const { data: project } = useProject(id);
-  const { data: tasks } = useTasks(id);
+  const { data: tasks = [] } = useTasks(id);
   const [tab, setTab] = useState("kanban");
 
   if (!project) return <NotFoundPage />;
@@ -45,7 +45,7 @@ export function ProjectDetailPage() {
             <Button variant="outline">
               <Filter /> Filter
             </Button>
-            <TaskForm />
+            <TaskForm projectId={id!} />
           </>
         }
       />
