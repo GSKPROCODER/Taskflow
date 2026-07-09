@@ -226,7 +226,7 @@ export function LandingPage() {
       {/* CTA */}
       <Section className="mx-auto max-w-6xl px-6 py-20">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary to-purple-700 px-8 py-20 text-center text-white shadow-2xl">
-          <div className="absolute -left-20 -top-20 size-64 rounded-full bg-white/10 blur-3xl" />
+          <div className="absolute -left-20 -top-20 size-64 rounded-full bg-card/10 blur-3xl" />
           <div className="absolute -right-20 -bottom-20 size-64 rounded-full bg-black/10 blur-3xl" />
           
           <h2 className="relative text-4xl font-bold tracking-tight">
@@ -235,7 +235,7 @@ export function LandingPage() {
           <p className="relative mx-auto mt-5 max-w-xl text-lg text-white/90 font-medium">
             Join thousands of teams already using TaskFlow. Get started in minutes. No credit card required.
           </p>
-          <Button size="lg" className="relative mt-10 h-14 bg-white text-primary hover:bg-slate-50 px-8 text-base font-semibold shadow-xl" asChild>
+          <Button size="lg" className="relative mt-10 h-14 bg-card text-primary hover:bg-slate-50 px-8 text-base font-semibold shadow-xl" asChild>
             <Link to="/signup">
               Start Building Now <ArrowRight className="ml-2 size-5" />
             </Link>

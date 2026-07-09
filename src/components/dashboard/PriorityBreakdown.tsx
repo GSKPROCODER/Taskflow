@@ -38,8 +38,8 @@ export function PriorityBreakdown({ metrics }: { metrics?: { priority?: Record<s
   };
 
   return (
-    <Card className="flex flex-col h-full shadow-sm shadow-slate-200/50 border-border bg-white rounded-[1rem]">
-      <CardHeader className="pb-2 border-b border-border/50 bg-white px-6 py-4 rounded-t-[1rem]">
+    <Card className="flex flex-col h-full shadow-sm shadow-slate-200/50 border-border bg-card rounded-[1rem] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand/5 hover:border-brand/20">
+      <CardHeader className="pb-2 border-b border-border/50 bg-card px-6 py-4 rounded-t-[1rem]">
         <CardTitle className="text-lg font-semibold">Tasks by Priority</CardTitle>
       </CardHeader>
       <CardContent className="flex items-center justify-between flex-1 p-6">

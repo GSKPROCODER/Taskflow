@@ -76,6 +76,43 @@
   --sidebar-accent-foreground: #F8FAFC;
 }
 
+.dark {
+  /* App surfaces (GitHub Dark) */
+  --background: #0d1117; 
+  --foreground: #c9d1d9;
+  --card: #161b22; 
+  --card-foreground: #c9d1d9;
+  --popover: #161b22;
+  --popover-foreground: #c9d1d9;
+
+  /* Brand primary (Switching to a nice GitHub-style blue to match the aesthetic, or keep purple. Let's use GitHub Blue for authenticity) */
+  --primary: #58a6ff;
+  --primary-foreground: #ffffff;
+  --brand: #58a6ff;
+  --brand-foreground: #ffffff;
+  --brand-muted: #1f3a5f;
+
+  --secondary: #21262d; 
+  --secondary-foreground: #c9d1d9;
+  --muted: #21262d;
+  --muted-foreground: #8b949e; 
+  --accent: #21262d;
+  --accent-foreground: #c9d1d9;
+
+  --destructive: #f85149;
+  --destructive-foreground: #ffffff;
+
+  --border: #30363d; 
+  --input: #21262d;
+  --ring: #58a6ff;
+
+  /* Sidebar */
+  --sidebar: #010409; 
+  --sidebar-foreground: #c9d1d9;
+  --sidebar-accent: #161b22;
+  --sidebar-accent-foreground: #c9d1d9;
+}
+
 @layer base {
   * {
     @apply border-border;

@@ -16,8 +16,8 @@ type Activity = {
 export function RecentActivity() {
   const { data: notifications = [] } = useDashboardActivity();
   return (
-    <Card className="shadow-sm shadow-slate-200/50 border-border bg-white rounded-[1rem] h-full flex flex-col">
-      <CardHeader className="flex flex-row items-center justify-between border-b border-border/50 bg-white px-6 py-4 rounded-t-[1rem]">
+    <Card className="shadow-sm shadow-slate-200/50 border-border bg-card rounded-[1rem] h-full flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand/5 hover:border-brand/20">
+      <CardHeader className="flex flex-row items-center justify-between border-b border-border/50 bg-card px-6 py-4 rounded-t-[1rem]">
         <CardTitle className="text-lg font-semibold">Recent Activity</CardTitle>
         <a href="#" className="text-sm font-medium text-brand hover:text-brand-muted hover:underline">View all</a>
       </CardHeader>

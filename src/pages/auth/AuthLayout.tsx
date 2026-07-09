@@ -48,8 +48,8 @@ export function AuthLayout({
         <p className="text-xs text-primary-foreground/60">
           © 2026 Shadow Wings · Internal Use Only
         </p>
-        <div className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-white/10 blur-2xl" />
-        <div className="pointer-events-none absolute -bottom-24 -left-10 size-72 rounded-full bg-white/10 blur-2xl" />
+        <div className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-card/10 blur-2xl" />
+        <div className="pointer-events-none absolute -bottom-24 -left-10 size-72 rounded-full bg-card/10 blur-2xl" />
       </div>
 
       {/* Form panel */}

@@ -107,7 +107,7 @@ export function ProjectDetailPage() {
               ))}
             </div>
             
-            <div className="overflow-hidden bg-white rounded-[1rem] shadow-sm shadow-slate-200/50 border border-border">
+            <div className="overflow-hidden bg-card rounded-[1rem] shadow-sm shadow-slate-200/50 border border-border">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm whitespace-nowrap">
                   <thead className="bg-slate-50/50 text-muted-foreground border-b border-border/60">
@@ -118,7 +118,7 @@ export function ProjectDetailPage() {
                       <th className="px-6 py-4 font-medium text-right">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-border/60 bg-white">
+                  <tbody className="divide-y divide-border/60 bg-card">
                     {filteredTasks.map((task) => (
                       <tr key={task.id} className="group transition-colors hover:bg-slate-50/50">
                         <td className="px-6 py-4">
@@ -157,7 +157,7 @@ export function ProjectDetailPage() {
               <div className="lg:col-span-1">
                 <TaskOverview tasks={tasks} />
               </div>
-              <div className="rounded-[1rem] border border-border bg-white shadow-sm shadow-slate-200/50 p-6">
+              <div className="rounded-[1rem] border border-border bg-card shadow-sm shadow-slate-200/50 p-6">
                 <h3 className="font-semibold text-lg">About this project</h3>
                 <p className="mt-2 text-sm text-muted-foreground">
                   {project.description}

@@ -19,12 +19,12 @@ export function StatCard({
 }) {
   return (
     <motion.div variants={staggerItem}>
-      <Card className="p-5 shadow-sm shadow-slate-200/50 border-border bg-white rounded-[1rem] transition-all hover:shadow-md">
+      <Card className="group p-5 shadow-sm shadow-slate-200/50 border-border bg-card rounded-[1rem] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand/5 hover:border-brand/20">
         <div className="flex flex-col space-y-4">
           <div className="flex items-center justify-between">
             <span
               className={cn(
-                "flex size-10 shrink-0 items-center justify-center rounded-xl",
+                "flex size-10 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110",
                 tone,
               )}
             >

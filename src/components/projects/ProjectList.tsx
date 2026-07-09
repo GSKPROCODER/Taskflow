@@ -17,7 +17,7 @@ import type { Project, Task } from "@/types";
 
 export function ProjectList({ projects }: { projects: Project[] }) {
   return (
-    <div className="w-full overflow-hidden bg-white rounded-[1rem] shadow-sm shadow-slate-200/50 border border-border">
+    <div className="w-full overflow-hidden bg-card rounded-[1rem] shadow-sm shadow-slate-200/50 border border-border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand/5 hover:border-brand/20">
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm whitespace-nowrap">
           <thead className="bg-slate-50/50 text-muted-foreground border-b border-border/60">
@@ -93,7 +93,7 @@ export function ProjectList({ projects }: { projects: Project[] }) {
         </table>
       </div>
       
-      <div className="flex items-center justify-between px-6 py-4 border-t border-border/60 bg-white text-sm text-muted-foreground">
+      <div className="flex items-center justify-between px-6 py-4 border-t border-border/60 bg-card text-sm text-muted-foreground">
         <span>Showing 1 to {Math.min(projects.length, 5)} of {projects.length} projects</span>
         <div className="flex items-center space-x-1">
           <Button variant="outline" size="sm" className="h-8 shadow-sm">Previous</Button>

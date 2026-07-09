@@ -20,7 +20,7 @@ export function ProjectsPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <input
               placeholder="Search projects..."
-              className="h-10 w-full rounded-lg border border-border bg-white shadow-sm pl-9 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all"
+              className="h-10 w-full rounded-lg border border-border bg-card shadow-sm pl-9 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all"
             />
           </div>
           <ProjectForm />

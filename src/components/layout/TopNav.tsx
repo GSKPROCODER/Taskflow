@@ -8,6 +8,9 @@ import {
   LogOut,
   User as UserIcon,
   Settings,
+  Menu,
+  Moon,
+  Sun,
 } from "lucide-react";
 import { Breadcrumb, type Crumb } from "./Breadcrumb";
 import { NotificationsPanel } from "./NotificationsPanel";
@@ -23,6 +26,7 @@ import { cn } from "@/lib/utils";
 import { avatarColor, initials } from "@/lib/ui";
 import { useAuth } from "@/hooks/useAuth";
 import { useNotifications } from "@/hooks/useNotifications";
+import { useUIStore } from "@/store/ui.store";
 import { projectById, taskById } from "@/lib/mock-data";
 
 function useCrumbs(): Crumb[] {
@@ -89,20 +93,45 @@ export function TopBar() {
   const { unreadCount } = useNotifications();
   const [bellOpen, setBellOpen] = useState(false);
   const navigate = useNavigate();
+  const { toggleSidebar, theme, toggleTheme } = useUIStore();
 
   return (
-    <header className="sticky top-0 z-40 flex items-center gap-4 border-b border-border bg-white px-6 py-3.5">
+    <header className="sticky top-0 z-40 flex items-center gap-4 border-b border-border bg-card px-6 py-3.5">
+      <IconButton title="Toggle Sidebar" onClick={toggleSidebar}>
+        <Menu className="size-4" />
+      </IconButton>
       <Breadcrumb items={crumbs} />
 
       <div className="relative ml-auto hidden w-full max-w-sm items-center md:flex">
         <Search className="absolute left-3 size-4 text-muted-foreground" />
         <input
           placeholder="Search anything..."
-          className="h-9 w-full rounded-lg border-0 bg-slate-100 pl-9 pr-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-brand/50"
+          className="h-9 w-full rounded-lg border-0 bg-secondary pl-9 pr-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-brand/50 transition-all"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              const q = e.currentTarget.value.trim().toLowerCase();
+              if (!q) return;
+              
+              if (q.includes("calendar")) navigate("/calendar");
+              else if (q.includes("project")) navigate("/projects");
+              else if (q.includes("team")) navigate("/team");
+              else if (q.includes("report")) navigate("/reports");
+              else if (q.includes("task")) navigate("/my-tasks");
+              else if (q.includes("setting")) navigate("/settings");
+              else if (q.includes("dash")) navigate("/dashboard");
+              
+              e.currentTarget.value = "";
+              e.currentTarget.blur();
+            }
+          }}
         />
       </div>
 
       <div className="flex items-center gap-4">
+        <IconButton title="Toggle Theme" onClick={toggleTheme}>
+          {theme === "dark" ? <Moon className="size-4" /> : <Sun className="size-4" />}
+        </IconButton>
+
         <DropdownMenu open={bellOpen} onOpenChange={setBellOpen}>
           <DropdownMenuTrigger asChild>
             <IconButton title="Notifications" active={bellOpen}>

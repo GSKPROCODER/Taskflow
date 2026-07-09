@@ -7,8 +7,8 @@ import type { Task } from "@/types";
 
 export function MyTasksWidget({ tasks }: { tasks: Task[] }) {
   return (
-    <Card className="shadow-sm shadow-slate-200/50 border-border bg-white rounded-[1rem] overflow-hidden">
-      <CardHeader className="flex-row items-center justify-between border-b border-border/50 bg-white px-6 py-4">
+    <Card className="shadow-sm shadow-slate-200/50 border-border bg-card rounded-[1rem] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand/5 hover:border-brand/20">
+      <CardHeader className="flex-row items-center justify-between border-b border-border/50 bg-card px-6 py-4">
         <CardTitle className="text-lg font-semibold">My Tasks</CardTitle>
         <Link
           to="/my-tasks"
@@ -29,7 +29,7 @@ export function MyTasksWidget({ tasks }: { tasks: Task[] }) {
                 <th className="px-6 py-3 font-medium text-right">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border/50 bg-white">
+            <tbody className="divide-y divide-border/50 bg-card">
               {tasks.slice(0, 5).map((task) => (
                 <tr key={task.id} className="group transition-colors hover:bg-slate-50/50">
                   <td className="px-6 py-3">

@@ -9,7 +9,8 @@ import {
   Bell,
   Settings,
   Hexagon,
-  LogOut
+  LogOut,
+  KanbanSquare
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -35,7 +36,7 @@ export function Sidebar() {
   };
 
   return (
-    <aside className="flex h-full w-64 shrink-0 flex-col border-r border-sidebar-accent bg-sidebar">
+    <aside className="flex h-full w-full flex-col bg-sidebar">
       {/* Brand Header */}
       <div className="flex items-center gap-3 px-6 py-6">
         <div className="flex size-8 items-center justify-center rounded-lg bg-brand text-white shadow-sm shadow-brand/20">
@@ -80,6 +81,12 @@ export function Sidebar() {
             <NavLink to="/reports" className={itemClass}>
               <BarChart2 className="size-4" />
               Reports
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/jira-sync" className={itemClass}>
+              <KanbanSquare className="size-4" />
+              Jira Sync
             </NavLink>
           </li>
         </ul>

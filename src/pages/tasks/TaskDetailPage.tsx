@@ -47,8 +47,8 @@ export function TaskDetailPage() {
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Main */}
         <div className="space-y-6 lg:col-span-2">
-          <div className="rounded-[1rem] bg-white border border-border shadow-sm shadow-slate-200/50 overflow-hidden">
-            <div className="border-b border-border/50 px-6 py-4 bg-white">
+          <div className="rounded-[1rem] bg-card border border-border shadow-sm shadow-slate-200/50 overflow-hidden">
+            <div className="border-b border-border/50 px-6 py-4 bg-card">
               <h3 className="font-semibold text-lg">Description</h3>
             </div>
             <div className="p-6">
@@ -58,8 +58,8 @@ export function TaskDetailPage() {
             </div>
           </div>
 
-          <div className="rounded-[1rem] bg-white border border-border shadow-sm shadow-slate-200/50 overflow-hidden">
-            <div className="border-b border-border/50 px-6 py-4 bg-white">
+          <div className="rounded-[1rem] bg-card border border-border shadow-sm shadow-slate-200/50 overflow-hidden">
+            <div className="border-b border-border/50 px-6 py-4 bg-card">
               <h3 className="font-semibold text-lg">Comments &amp; Activity</h3>
             </div>
             <div className="p-6 space-y-5 bg-slate-50/30">
@@ -72,7 +72,7 @@ export function TaskDetailPage() {
 
         {/* Sidebar */}
         <div className="space-y-4">
-          <div className="rounded-[1rem] bg-white border border-border shadow-sm shadow-slate-200/50 p-6 space-y-6">
+          <div className="rounded-[1rem] bg-card border border-border shadow-sm shadow-slate-200/50 p-6 space-y-6">
             <div>
               <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 Status
