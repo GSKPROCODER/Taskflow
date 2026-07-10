@@ -6,6 +6,7 @@ import {
   CheckCircle2,
   Filter,
   Folder,
+  Check,
 } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { StatCard } from "@/components/dashboard/StatCard";
@@ -14,6 +15,15 @@ import { PriorityBreakdown } from "@/components/dashboard/PriorityBreakdown";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { MyTasksWidget } from "@/components/dashboard/MyTasksWidget";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useState } from "react";
 import { staggerContainer } from "@/lib/motion";
 import { useAuth } from "@/hooks/useAuth";
 import { useDashboardMetrics, useMyTasks } from "@/hooks/useDashboard";
@@ -23,15 +33,49 @@ export function DashboardPage() {
   const { data: metrics } = useDashboardMetrics();
   const { data: myTasks = [] } = useMyTasks();
 
+  const [activeFilter, setActiveFilter] = useState<string>("all");
+
+  const handleFilterChange = (filter: string) => {
+    setActiveFilter(filter);
+    // Real implementation would refetch metrics/tasks based on filter
+  };
+
   return (
     <div className="space-y-6">
       <PageHeader
         title={`Welcome back, ${user?.name?.split(" ")[0] ?? "there"}`}
         subtitle="Here's what's happening across your projects today."
         actions={
-          <Button variant="outline">
-            <Filter /> Filter
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="gap-2">
+                <Filter className="size-4" /> Filter
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuLabel>Timeframe</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => handleFilterChange("all")}>
+                {activeFilter === "all" ? <Check className="mr-2 size-4" /> : <span className="mr-2 size-4" />}
+                All Time
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleFilterChange("this-week")}>
+                {activeFilter === "this-week" ? <Check className="mr-2 size-4" /> : <span className="mr-2 size-4" />}
+                This Week
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleFilterChange("this-month")}>
+                {activeFilter === "this-month" ? <Check className="mr-2 size-4" /> : <span className="mr-2 size-4" />}
+                This Month
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>Project Type</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => handleFilterChange("active")}>
+                {activeFilter === "active" ? <Check className="mr-2 size-4" /> : <span className="mr-2 size-4" />}
+                Active Only
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         }
       />
 

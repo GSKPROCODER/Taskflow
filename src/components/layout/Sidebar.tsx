@@ -10,7 +10,8 @@ import {
   Settings,
   Hexagon,
   LogOut,
-  KanbanSquare
+  KanbanSquare,
+  MessageSquare
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -87,6 +88,12 @@ export function Sidebar() {
             <NavLink to="/jira-sync" className={itemClass}>
               <KanbanSquare className="size-4" />
               Jira Sync
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/slack-feed" className={itemClass}>
+              <MessageSquare className="size-4" />
+              Slack Feed
             </NavLink>
           </li>
         </ul>

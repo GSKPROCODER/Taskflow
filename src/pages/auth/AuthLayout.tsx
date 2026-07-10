@@ -3,6 +3,8 @@ import { Hexagon, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { fadeUp } from "@/lib/motion";
 
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+
 const HIGHLIGHTS = [
   "Role-based workflows for Leads, Developers & Testers",
   "Structured QA: Testing → Approve / Reject",
@@ -22,13 +24,16 @@ export function AuthLayout({
   footer: React.ReactNode;
 }) {
   return (
-    <div className="grid min-h-screen lg:grid-cols-2">
+    <div className="grid min-h-screen lg:grid-cols-2 bg-background text-foreground">
       {/* Brand panel */}
       <div className="relative hidden flex-col justify-between overflow-hidden bg-primary p-10 text-primary-foreground lg:flex">
-        <Link to="/" className="flex items-center gap-2">
-          <Hexagon className="size-6" fill="currentColor" />
-          <span className="text-lg font-semibold">TaskFlow</span>
-        </Link>
+        <div className="flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-2">
+            <Hexagon className="size-6" fill="currentColor" />
+            <span className="text-lg font-semibold">TaskFlow</span>
+          </Link>
+          <ThemeToggle />
+        </div>
         <div>
           <h2 className="text-3xl font-semibold leading-tight">
             Plan your team's best work with ease.

@@ -16,6 +16,7 @@ import { TeamPage } from "@/pages/team/TeamPage";
 import { ReportsPage } from "@/pages/reports/ReportsPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 import { JiraSyncPage } from "@/pages/jira/JiraSyncPage";
+import { SlackFeedPage } from "@/pages/slack/SlackFeedPage";
 
 // Route table (PRD §9). Public marketing + auth; app routes nested in AppShell.
 export const router = createBrowserRouter([
@@ -37,6 +38,7 @@ export const router = createBrowserRouter([
           { path: "/team", element: <TeamPage /> },
           { path: "/reports", element: <ReportsPage /> },
           { path: "/jira-sync", element: <JiraSyncPage /> },
+          { path: "/slack-feed", element: <SlackFeedPage /> },
           { path: "/notifications", element: <NotificationsPage /> },
           { path: "/settings", element: <SettingsPage /> },
         ],

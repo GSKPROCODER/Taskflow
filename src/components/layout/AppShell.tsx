@@ -1,12 +1,11 @@
 import { useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Sidebar } from "./Sidebar";
 import { TopBar } from "./TopNav";
 import { fadeUp } from "@/lib/motion";
-import { useUIStore } from "@/store/ui.store";
 
-const MAIN_PAGES = ["/dashboard", "/projects", "/my-tasks", "/calendar"];
+const MAIN_PAGES = ["/dashboard", "/projects", "/my-tasks", "/calendar", "/team", "/reports", "/jira-sync", "/slack-feed"];
 
 /**
  * Authenticated app frame: full-bleed sidebar + topbar over the routed content.
@@ -16,7 +15,6 @@ export function AppShell() {
   const location = useLocation();
   const navigate = useNavigate();
   const isScrolling = useRef(false);
-  const { sidebarOpen } = useUIStore();
 
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
@@ -49,19 +47,9 @@ export function AppShell() {
 
   return (
     <div className="flex h-screen overflow-hidden bg-sidebar">
-      <AnimatePresence initial={false}>
-        {sidebarOpen && (
-          <motion.div
-            initial={{ width: 0, opacity: 0 }}
-            animate={{ width: 256, opacity: 1 }}
-            exit={{ width: 0, opacity: 0 }}
-            transition={{ type: "spring", bounce: 0, duration: 0.3 }}
-            className="flex-shrink-0 border-r border-sidebar-accent"
-          >
-            <Sidebar />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div className="flex-shrink-0 w-64 border-r border-sidebar-accent bg-sidebar">
+        <Sidebar />
+      </div>
       <div className="flex min-w-0 flex-1 flex-col">
         <TopBar />
         <main className="flex-1 overflow-y-auto bg-background">

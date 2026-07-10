@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { fadeUp, staggerContainer, staggerItem } from "@/lib/motion";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const NAV = ["Features", "Customers", "Integrations", "Pricing"];
 const LOGOS = ["Edisen", "BuzzFeed", "M&C", "Bulletproof", "Deloitte", "KPMG"];
@@ -69,7 +70,7 @@ function Section({
 
 export function LandingPage() {
   return (
-    <div className="min-h-screen bg-sidebar text-sidebar-foreground">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Nav */}
       <header className="sticky top-0 z-30 border-b border-sidebar-accent/50 bg-sidebar/80 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
@@ -91,7 +92,8 @@ export function LandingPage() {
             ))}
           </nav>
           <div className="flex items-center gap-3">
-            <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-sidebar-accent" asChild>
+            <ThemeToggle />
+            <Button variant="ghost" className="text-muted-foreground hover:text-foreground hover:bg-accent" asChild>
               <Link to="/login">Log in</Link>
             </Button>
             <Button className="bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/25" asChild>
@@ -115,11 +117,11 @@ export function LandingPage() {
           Now in MVP — Shadow Wings
         </motion.span>
         
-        <h1 className="mx-auto mt-8 max-w-4xl text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight text-white">
+        <h1 className="mx-auto mt-8 max-w-4xl text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight text-foreground">
           Plan your team's <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-400">best work</span> with ease
         </h1>
         
-        <p className="mx-auto mt-6 max-w-2xl text-lg md:text-xl text-slate-400 leading-relaxed">
+        <p className="mx-auto mt-6 max-w-2xl text-lg md:text-xl text-muted-foreground leading-relaxed">
           A lightweight, production-grade collaborative task and project
           management platform designed exclusively for high-performing agile teams.
         </p>
@@ -130,7 +132,7 @@ export function LandingPage() {
               Get Started Free <ArrowRight className="ml-2 size-4" />
             </Link>
           </Button>
-          <Button size="lg" variant="outline" className="w-full sm:w-auto h-12 px-8 border-sidebar-accent bg-sidebar-accent/50 text-white hover:bg-sidebar-accent hover:text-white" asChild>
+          <Button size="lg" variant="outline" className="w-full sm:w-auto h-12 px-8 border-border bg-card/50 text-foreground hover:bg-accent hover:text-accent-foreground" asChild>
             <Link to="/dashboard">View Live Demo</Link>
           </Button>
         </div>
@@ -138,32 +140,32 @@ export function LandingPage() {
         {/* Product mock */}
         <motion.div
           variants={fadeUp}
-          className="mx-auto mt-20 max-w-5xl overflow-hidden rounded-2xl border border-sidebar-accent bg-[#0F172A] shadow-2xl ring-1 ring-white/10"
+          className="mx-auto mt-20 max-w-5xl overflow-hidden rounded-2xl border border-border bg-card shadow-2xl ring-1 ring-black/5 dark:ring-white/10"
         >
-          <div className="flex items-center gap-2 border-b border-sidebar-accent bg-sidebar px-4 py-3">
+          <div className="flex items-center gap-2 border-b border-border bg-muted/50 px-4 py-3">
             <span className="size-3 rounded-full bg-rose-500/90" />
             <span className="size-3 rounded-full bg-amber-500/90" />
             <span className="size-3 rounded-full bg-emerald-500/90" />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-6 bg-gradient-to-b from-[#0F172A] to-sidebar">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-6 bg-gradient-to-b from-card to-background">
             {["To-do", "In Progress", "In Review", "Completed"].map(
               (col, i) => (
                 <div
                   key={col}
-                  className="rounded-xl border border-sidebar-accent bg-sidebar/50 p-4"
+                  className="rounded-xl border border-border bg-muted/30 p-4"
                 >
-                  <p className="mb-4 text-sm font-semibold text-slate-300">
+                  <p className="mb-4 text-sm font-semibold text-foreground/80">
                     {col}
                   </p>
                   <div className="space-y-3">
                     {Array.from({ length: 3 - (i % 2) }).map((_, j) => (
                       <div
                         key={j}
-                        className="rounded-lg border border-sidebar-accent bg-[#0B1121] p-3 shadow-sm"
+                        className="rounded-lg border border-border bg-background p-3 shadow-sm"
                       >
                         <div className="h-2 w-16 rounded bg-primary/40" />
-                        <div className="mt-3 h-2 w-full rounded bg-slate-700" />
-                        <div className="mt-2 h-2 w-2/3 rounded bg-slate-700" />
+                        <div className="mt-3 h-2 w-full rounded bg-muted-foreground/30" />
+                        <div className="mt-2 h-2 w-2/3 rounded bg-muted-foreground/30" />
                       </div>
                     ))}
                   </div>
@@ -175,13 +177,13 @@ export function LandingPage() {
       </Section>
 
       {/* Logo cloud */}
-      <Section className="mx-auto max-w-6xl px-6 py-12 border-y border-sidebar-accent/50 bg-sidebar/30">
-        <p className="text-center text-sm font-medium text-slate-400">
+      <Section className="mx-auto max-w-6xl px-6 py-12 border-y border-border bg-muted/10">
+        <p className="text-center text-sm font-medium text-muted-foreground">
           TRUSTED BY INNOVATIVE TEAMS WORLDWIDE
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-x-12 gap-y-6 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
           {LOGOS.map((l) => (
-            <span key={l} className="text-xl font-bold tracking-tighter text-white">
+            <span key={l} className="text-xl font-bold tracking-tighter text-foreground">
               {l}
             </span>
           ))}
@@ -191,10 +193,10 @@ export function LandingPage() {
       {/* Features */}
       <Section className="mx-auto max-w-6xl px-6 py-24">
         <div id="features" className="mb-16 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
             Make better planning <span className="text-primary">decisions</span>
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-400">
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
             Everything a small agile team needs to ship great work — without the
             enterprise bloat and complexity.
           </p>
@@ -210,14 +212,14 @@ export function LandingPage() {
             <motion.div
               key={f.title}
               variants={staggerItem}
-              className="group relative rounded-2xl border border-sidebar-accent bg-sidebar/50 p-8 transition-all hover:bg-sidebar-accent/50 hover:shadow-lg hover:-translate-y-1"
+              className="group relative rounded-2xl border border-border bg-card/50 p-8 transition-all hover:bg-accent/50 hover:shadow-lg hover:-translate-y-1"
             >
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-primary/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
               <span className="relative flex size-12 items-center justify-center rounded-xl bg-primary/10 text-primary shadow-inner">
                 <f.icon className="size-6" />
               </span>
-              <h3 className="relative mt-6 text-xl font-semibold text-white">{f.title}</h3>
-              <p className="relative mt-3 leading-relaxed text-slate-400">{f.body}</p>
+              <h3 className="relative mt-6 text-xl font-semibold text-foreground">{f.title}</h3>
+              <p className="relative mt-3 leading-relaxed text-muted-foreground">{f.body}</p>
             </motion.div>
           ))}
         </motion.div>
@@ -244,9 +246,9 @@ export function LandingPage() {
       </Section>
 
       {/* Footer */}
-      <footer className="border-t border-sidebar-accent/50 bg-[#070A14]">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 px-6 py-12 text-sm text-slate-500 sm:flex-row">
-          <div className="flex items-center gap-2 text-lg font-bold text-white">
+      <footer className="border-t border-border bg-muted/20">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 px-6 py-12 text-sm text-muted-foreground sm:flex-row">
+          <div className="flex items-center gap-2 text-lg font-bold text-foreground">
             <span className="flex size-7 items-center justify-center rounded bg-primary text-white">
               <Hexagon className="size-4" fill="currentColor" />
             </span>

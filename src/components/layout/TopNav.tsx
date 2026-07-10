@@ -8,7 +8,6 @@ import {
   LogOut,
   User as UserIcon,
   Settings,
-  Menu,
   Moon,
   Sun,
 } from "lucide-react";
@@ -93,13 +92,10 @@ export function TopBar() {
   const { unreadCount } = useNotifications();
   const [bellOpen, setBellOpen] = useState(false);
   const navigate = useNavigate();
-  const { toggleSidebar, theme, toggleTheme } = useUIStore();
+  const { theme, toggleTheme } = useUIStore();
 
   return (
     <header className="sticky top-0 z-40 flex items-center gap-4 border-b border-border bg-card px-6 py-3.5">
-      <IconButton title="Toggle Sidebar" onClick={toggleSidebar}>
-        <Menu className="size-4" />
-      </IconButton>
       <Breadcrumb items={crumbs} />
 
       <div className="relative ml-auto hidden w-full max-w-sm items-center md:flex">
