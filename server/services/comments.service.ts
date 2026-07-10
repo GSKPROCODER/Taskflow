@@ -76,8 +76,7 @@ export async function listByTask(
   const last = rows[rows.length - 1];
   // Only offer a nextCursor if this page was full — a partial page means we
   // reached the end of the feed.
-  const nextCursor =
-    rows.length === limit && last ? encodeCursor(last) : null;
+  const nextCursor = rows.length === limit && last ? encodeCursor(last) : null;
 
   return { data: rows, nextCursor };
 }

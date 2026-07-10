@@ -40,9 +40,7 @@ describe("offsetPaginationSchema", () => {
   });
 
   it("rejects a page below 1", () => {
-    expect(offsetPaginationSchema.safeParse({ page: "0" }).success).toBe(
-      false,
-    );
+    expect(offsetPaginationSchema.safeParse({ page: "0" }).success).toBe(false);
   });
 });
 

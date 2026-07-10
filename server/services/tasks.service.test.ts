@@ -69,9 +69,7 @@ describe("tasks.service", () => {
 
   describe("listByProject", () => {
     it("caps the result at 200 rows via .limit(200)", async () => {
-      const limitSpy = vi.fn(() =>
-        Promise.resolve({ data: [], error: null }),
-      );
+      const limitSpy = vi.fn(() => Promise.resolve({ data: [], error: null }));
       fromMock.mockImplementation((table: string) => {
         if (table === "projects") {
           return mockSupabaseFrom({

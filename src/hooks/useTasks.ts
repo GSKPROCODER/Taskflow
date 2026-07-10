@@ -24,9 +24,7 @@ interface PaginatedResponse<T> {
 async function fetchTasks(projectId?: string): Promise<Task[]> {
   try {
     if (projectId) {
-      const res = await apiClient.get<Task[]>(
-        `/projects/${projectId}/tasks`,
-      );
+      const res = await apiClient.get<Task[]>(`/projects/${projectId}/tasks`);
       return res.data.length ? res.data : tasksByProject(projectId);
     }
     const res = await apiClient.get<PaginatedResponse<Task>>("/tasks", {
