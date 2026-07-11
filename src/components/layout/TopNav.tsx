@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, forwardRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
@@ -68,23 +68,23 @@ function useCrumbs(): Crumb[] {
   }
 }
 
-function IconButton({
-  children,
-  active,
-  ...props
-}: React.ComponentProps<"button"> & { active?: boolean }) {
-  return (
-    <button
-      className={cn(
-        "relative flex size-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
-        active && "text-primary",
-      )}
-      {...props}
-    >
-      {children}
-    </button>
-  );
-}
+const IconButton = forwardRef<HTMLButtonElement, React.ComponentProps<"button"> & { active?: boolean }>(
+  ({ children, active, ...props }, ref) => {
+    return (
+      <button
+        ref={ref}
+        className={cn(
+          "relative flex size-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
+          active && "text-primary",
+        )}
+        {...props}
+      >
+        {children}
+      </button>
+    );
+  }
+);
+IconButton.displayName = "IconButton";
 
 export function TopBar() {
   const crumbs = useCrumbs();
