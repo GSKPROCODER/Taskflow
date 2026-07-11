@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { CheckCheck, Settings2, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { popIn } from "@/lib/motion";
@@ -7,13 +7,25 @@ import { cn } from "@/lib/utils";
 import { avatarColor, initials } from "@/lib/ui";
 import { relativeTime } from "@/lib/format";
 import { Button } from "@/components/ui/button";
-import { notifications, MOCK_NOW, type AppNotification } from "@/lib/mock-data";
+import { notifications as initialNotifications, MOCK_NOW, type AppNotification } from "@/lib/mock-data";
 
 const TABS = ["View All", "Files", "Jobs", "Invites"] as const;
 
-function NotificationRow({ n }: { n: AppNotification }) {
+function NotificationRow({ 
+  n, 
+  onAction 
+}: { 
+  n: AppNotification; 
+  onAction: (id: string, action: "Approve" | "Cancel") => void;
+}) {
   return (
-    <div className="flex gap-3 px-4 py-3">
+    <motion.div 
+      layout
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      className="flex gap-3 px-4 py-3"
+    >
       <div
         className={cn(
           "flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-medium text-white",
@@ -33,23 +45,54 @@ function NotificationRow({ n }: { n: AppNotification }) {
         </p>
         {n.kind === "invite" && (
           <div className="mt-2 flex gap-2">
-            <Button size="sm" variant="outline">
+            <Button size="sm" variant="outline" onClick={() => onAction(n.id, "Cancel")}>
               Cancel
             </Button>
-            <Button size="sm">Approve</Button>
+            <Button size="sm" onClick={() => onAction(n.id, "Approve")}>Approve</Button>
           </div>
         )}
       </div>
       {n.unread && (
         <span className="mt-1.5 size-2 shrink-0 rounded-full bg-emerald-500" />
       )}
-    </div>
+    </motion.div>
   );
 }
 
 export function NotificationsPanel() {
   const [tab, setTab] = useState<(typeof TABS)[number]>("View All");
-  const unread = notifications.filter((n) => n.unread).length;
+  const [notifications, setNotifications] = useState(initialNotifications);
+
+  const unreadCount = notifications.filter((n) => n.unread).length;
+
+  const filteredNotifications = useMemo(() => {
+    return notifications.filter((n) => {
+      if (tab === "View All") return true;
+      if (tab === "Files") return n.kind === "document";
+      if (tab === "Jobs") return n.kind === "update";
+      if (tab === "Invites") return n.kind === "invite";
+      return true;
+    });
+  }, [notifications, tab]);
+
+  const markAllRead = () => {
+    setNotifications((prev) => prev.map((n) => ({ ...n, unread: false })));
+  };
+
+  const handleInviteAction = (id: string, action: "Approve" | "Cancel") => {
+    setNotifications((prev) =>
+      prev.map((n) =>
+        n.id === id
+          ? {
+              ...n,
+              kind: "update", // update kind to hide buttons
+              action: action === "Approve" ? "accepted the invite for" : "declined the invite for",
+              unread: false,
+            }
+          : n
+      )
+    );
+  };
 
   return (
     <motion.div
@@ -63,21 +106,29 @@ export function NotificationsPanel() {
         <h3 className="font-semibold">Notifications</h3>
         <div className="flex items-center gap-1 text-muted-foreground">
           <button
-            className="rounded-md p-1.5 hover:bg-accent"
+            onClick={markAllRead}
+            disabled={unreadCount === 0}
+            className="rounded-md p-1.5 hover:bg-accent disabled:opacity-50"
             title="Mark all read"
           >
             <CheckCheck className="size-4" />
           </button>
-          <button className="rounded-md p-1.5 hover:bg-accent" title="Settings">
+          <Link to="/settings" className="rounded-md p-1.5 hover:bg-accent" title="Settings">
             <Settings2 className="size-4" />
-          </button>
+          </Link>
         </div>
       </div>
 
       <div className="flex items-center gap-1 px-2">
         {TABS.map((t) => {
           const active = t === tab;
-          const count = t === "View All" ? notifications.length : undefined;
+          const count = t === "View All" 
+            ? notifications.length 
+            : t === "Files" ? notifications.filter(n => n.kind === "document").length
+            : t === "Jobs" ? notifications.filter(n => n.kind === "update").length
+            : t === "Invites" ? notifications.filter(n => n.kind === "invite").length
+            : 0;
+
           return (
             <button
               key={t}
@@ -90,17 +141,28 @@ export function NotificationsPanel() {
               )}
             >
               {t}
-              {count !== undefined && ` (${count})`}
-              {t === "Invites" && ` (${unread})`}
+              {count !== undefined && count > 0 && ` (${count})`}
             </button>
           );
         })}
       </div>
 
       <div className="mt-1 max-h-[340px] divide-y divide-border overflow-y-auto border-t border-border">
-        {notifications.map((n) => (
-          <NotificationRow key={n.id} n={n} />
-        ))}
+        <AnimatePresence mode="popLayout">
+          {filteredNotifications.length > 0 ? (
+            filteredNotifications.map((n) => (
+              <NotificationRow key={n.id} n={n} onAction={handleInviteAction} />
+            ))
+          ) : (
+            <motion.div 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              className="py-12 text-center text-sm text-muted-foreground"
+            >
+              No {tab.toLowerCase()} notifications found.
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       <Link
