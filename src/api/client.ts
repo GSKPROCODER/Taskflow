@@ -1,11 +1,23 @@
 import axios from "axios";
+import { supabase } from "@/lib/supabase";
 
 /**
  * Typed HTTP client for the TaskFlow API (PRD §8, §9).
  * Base URL points at the Hono API mounted under /api/v1.
- * TODO: attach the Supabase JWT via a request interceptor.
  */
 export const apiClient = axios.create({
   baseURL: "/api/v1",
   headers: { "Content-Type": "application/json" },
+});
+
+// Attach the current Supabase session's JWT to every request — the API's
+// authMiddleware (server/middleware/auth.middleware.ts) requires it.
+apiClient.interceptors.request.use(async (config) => {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (session?.access_token) {
+    config.headers.Authorization = `Bearer ${session.access_token}`;
+  }
+  return config;
 });
