@@ -5,11 +5,9 @@ import {
   List as ListIcon,
   LayoutDashboard,
   Settings,
-  Filter,
 } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { TaskForm } from "@/components/tasks/TaskForm";
 import { TaskStatusBadge } from "@/components/tasks/TaskStatusBadge";
@@ -50,9 +48,6 @@ export function ProjectDetailPage() {
         subtitle={project.description ?? undefined}
         actions={
           <>
-            <Button variant="outline">
-              <Filter /> Filter
-            </Button>
             <TaskForm projectId={id!} />
           </>
         }

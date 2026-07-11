@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { Filter } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { TaskList } from "@/components/tasks/TaskList";
 import { FilterPills, type FilterDef } from "@/components/calendar/FilterPills";
-import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useMyTasks } from "@/hooks/useTasks";
 // Removed unused imports
@@ -69,11 +67,6 @@ export function MyTasksPage() {
       <PageHeader
         title="My Tasks"
         subtitle="Everything assigned to you across all projects."
-        actions={
-          <Button variant="outline">
-            <Filter /> Filter
-          </Button>
-        }
       />
       <FilterPills
         filters={filters}

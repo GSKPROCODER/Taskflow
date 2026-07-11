@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Filter, Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { CalendarWeek } from "@/components/calendar/CalendarWeek";
 import { FilterPills } from "@/components/calendar/FilterPills";
@@ -39,9 +39,6 @@ export function CalendarPage() {
         subtitle="Stay organized and on track with your personalized calendar."
         actions={
           <>
-            <Button variant="outline">
-              <Filter /> Filter
-            </Button>
             <Button>
               <Plus /> New
             </Button>
