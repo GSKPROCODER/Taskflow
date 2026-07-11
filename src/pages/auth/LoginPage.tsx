@@ -9,10 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  signInWithPassword,
   signInWithGoogle,
   signInWithGithub,
 } from "@/lib/auth";
+import { useAuthStore } from "@/store/auth.store";
 
 const schema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -32,7 +32,15 @@ export function LoginPage() {
   const onSubmit = async (values: FormValues) => {
     setServerError(null);
     try {
-      await signInWithPassword(values.email, values.password);
+      // Mock login for UI preview since Vercel has no Supabase keys
+      useAuthStore.getState().setUser({
+        id: "mock-id-123",
+        email: values.email,
+        name: values.email.split("@")[0] || "User",
+        role: "team_lead",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
       navigate("/dashboard");
     } catch (err) {
       setServerError(err instanceof Error ? err.message : "Sign in failed");

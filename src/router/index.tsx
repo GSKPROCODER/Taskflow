@@ -1,7 +1,6 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Navigate, createBrowserRouter } from "react-router-dom";
 import { AppShell } from "@/components/layout/AppShell";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { LandingPage } from "@/pages/marketing/LandingPage";
 import { LoginPage } from "@/pages/auth/LoginPage";
 import { SignupPage } from "@/pages/auth/SignupPage";
 import { DashboardPage } from "@/pages/dashboard/DashboardPage";
@@ -20,7 +19,7 @@ import { SlackFeedPage } from "@/pages/slack/SlackFeedPage";
 
 // Route table (PRD §9). Public marketing + auth; app routes nested in AppShell.
 export const router = createBrowserRouter([
-  { path: "/", element: <LandingPage /> },
+  { path: "/", element: <Navigate to="/login" replace /> },
   { path: "/login", element: <LoginPage /> },
   { path: "/signup", element: <SignupPage /> },
   {
