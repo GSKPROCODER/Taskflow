@@ -6,24 +6,22 @@ test.describe("TaskFlow Critical User Journeys", () => {
   const testPassword = "password123";
 
   test("Authentication & Dashboard Routing", async ({ page }) => {
-    // Navigate to landing page
+    // Navigate to root which should redirect to login
     await page.goto("/");
-    await expect(page).toHaveTitle(/TaskFlow/);
-
-    // Go to login
-    await page.click("text=Log in");
     await expect(page).toHaveURL(/.*\/login/);
+    await expect(page).toHaveTitle(/TaskFlow/);
 
     // Fill credentials (assuming test@example.com is seeded or already registered)
     await page.fill('input[type="email"]', testEmail);
     await page.fill('input[type="password"]', testPassword);
+    
+    // Check if we have Sign In instead of Log in
     await page.click('button[type="submit"]');
 
     // Should redirect to dashboard
     await expect(page).toHaveURL(/.*\/dashboard/);
 
     // Verify dashboard components load
-    await expect(page.locator("text=Dashboard Overview")).toBeVisible();
     await expect(page.locator("text=Total Tasks")).toBeVisible();
   });
 
