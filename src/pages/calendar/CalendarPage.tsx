@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Filter, Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { CalendarWeek } from "@/components/calendar/CalendarWeek";
 import { FilterPills } from "@/components/calendar/FilterPills";
@@ -15,6 +15,22 @@ const VIEWS = [
 
 export function CalendarPage() {
   const [view, setView] = useState<(typeof VIEWS)[number]["value"]>("week");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filter, setFilter] = useState("all");
+
+  const filters = [
+    {
+      id: "type",
+      label: "Schedule Type",
+      value: filter,
+      options: [
+        { label: "All Schedule", value: "all" },
+        { label: "Events", value: "events" },
+        { label: "Meetings", value: "meetings" },
+        { label: "Task Reminder", value: "reminders" },
+      ],
+    },
+  ];
 
   return (
     <div className="space-y-6">
@@ -23,9 +39,6 @@ export function CalendarPage() {
         subtitle="Stay organized and on track with your personalized calendar."
         actions={
           <>
-            <Button variant="outline">
-              <Filter /> Filter
-            </Button>
             <Button>
               <Plus /> New
             </Button>
@@ -34,12 +47,10 @@ export function CalendarPage() {
       />
 
       <FilterPills
-        pills={[
-          { label: "All Schedule" },
-          { label: "Events" },
-          { label: "Meetings" },
-          { label: "Task Reminder" },
-        ]}
+        filters={filters}
+        onFilterChange={(_, val) => setFilter(val)}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
       />
 
       <div className="flex items-center justify-between">

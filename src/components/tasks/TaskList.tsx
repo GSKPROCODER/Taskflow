@@ -32,7 +32,7 @@ export function TaskList({ tasks }: { tasks: Task[] }) {
     });
 
   return (
-    <div className="overflow-x-auto rounded-2xl border border-border bg-card">
+    <div className="overflow-x-auto rounded-[1rem] border border-border bg-card shadow-sm shadow-slate-200/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand/5 hover:border-brand/20">
       <table className="w-full min-w-[920px] border-collapse text-sm">
         <thead>
           <tr className="border-b border-border text-left text-muted-foreground">

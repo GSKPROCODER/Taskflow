@@ -6,7 +6,7 @@ export type Crumb = { label: string; to?: string };
 /** Breadcrumb trail: muted parents, bold current (matches the reference topbar). */
 export function Breadcrumb({ items }: { items: Crumb[] }) {
   return (
-    <nav className="flex items-center gap-1.5 text-sm">
+    <nav className="flex items-center gap-1.5 text-lg font-medium">
       {items.map((item, i) => {
         const last = i === items.length - 1;
         return (

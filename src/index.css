@@ -1,1 +1,143 @@
-@import "../styles/globals.css";
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-muted: var(--brand-muted);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+}
+
+:root {
+  --radius: 1rem;
+
+  /* App surfaces */
+  --background: #f8f9fa; /* Light gray/slate-50 background for main content */
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+
+  /* Brand primary */
+  --primary: #6c4cf1;
+  --primary-foreground: #ffffff;
+  --brand: #6c4cf1;
+  --brand-foreground: #ffffff;
+  --brand-muted: #f3f0ff;
+
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f8fafc;
+  --accent-foreground: #0f172a;
+
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #6c4cf1;
+
+  /* Sidebar */
+  --sidebar: #0b1121; /* Dark navy */
+  --sidebar-foreground: #f8fafc;
+  --sidebar-accent: #1e293b;
+  --sidebar-accent-foreground: #f8fafc;
+}
+
+.dark {
+  /* App surfaces (GitHub Dark) */
+  --background: #0d1117;
+  --foreground: #c9d1d9;
+  --card: #161b22;
+  --card-foreground: #c9d1d9;
+  --popover: #161b22;
+  --popover-foreground: #c9d1d9;
+
+  /* Brand primary (Switching to a nice GitHub-style blue to match the aesthetic, or keep purple. Let's use GitHub Blue for authenticity) */
+  --primary: #58a6ff;
+  --primary-foreground: #ffffff;
+  --brand: #58a6ff;
+  --brand-foreground: #ffffff;
+  --brand-muted: #1f3a5f;
+
+  --secondary: #21262d;
+  --secondary-foreground: #c9d1d9;
+  --muted: #21262d;
+  --muted-foreground: #8b949e;
+  --accent: #21262d;
+  --accent-foreground: #c9d1d9;
+
+  --destructive: #f85149;
+  --destructive-foreground: #ffffff;
+
+  --border: #30363d;
+  --input: #21262d;
+  --ring: #58a6ff;
+
+  /* Sidebar */
+  --sidebar: #010409;
+  --sidebar-foreground: #c9d1d9;
+  --sidebar-accent: #161b22;
+  --sidebar-accent-foreground: #c9d1d9;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-family: "Inter", sans-serif;
+  }
+
+  /* Thin, subtle scrollbars to match the clean aesthetic */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: oklch(0.85 0 0) transparent;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}

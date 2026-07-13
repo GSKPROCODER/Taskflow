@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+// Removed unused z import
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useCreateProject } from "@/hooks/useProjects";
 import {
   Dialog,
   DialogTrigger,
@@ -18,13 +19,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-const schema = z.object({
-  name: z.string().min(1, "Name is required").max(200),
-  description: z.string().optional(),
-});
-type FormValues = z.infer<typeof schema>;
+import {
+  createProjectSchema,
+  type CreateProjectInput,
+} from "../../../server/validators/project.schema";
 
-/** Create-project dialog (UI only for this pass). */
+type FormValues = CreateProjectInput;
+
+/** Create-project dialog. */
 export function ProjectForm({ trigger }: { trigger?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const {
@@ -32,12 +34,21 @@ export function ProjectForm({ trigger }: { trigger?: React.ReactNode }) {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormValues>({ resolver: zodResolver(schema) });
+  } = useForm<FormValues>({ resolver: zodResolver(createProjectSchema) });
+
+  const createProject = useCreateProject();
 
   const onSubmit = (values: FormValues) => {
-    console.info("create project", values);
-    reset();
-    setOpen(false);
+    createProject.mutate(values, {
+      onSuccess: () => {
+        reset();
+        setOpen(false);
+      },
+      onError: (err) => {
+        console.error("Failed to create project", err);
+        // Could show a toast error here
+      },
+    });
   };
 
   return (
@@ -62,10 +73,20 @@ export function ProjectForm({ trigger }: { trigger?: React.ReactNode }) {
             <Input
               id="name"
               placeholder="e.g. Craftboard Project"
+              className={
+                errors.name
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : ""
+              }
               {...register("name")}
             />
             {errors.name && (
-              <p className="text-xs text-destructive">{errors.name.message}</p>
+              <p className="flex items-center gap-1 text-[13px] font-medium text-destructive mt-1">
+                <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-destructive/10">
+                  !
+                </span>
+                {errors.name.message}
+              </p>
             )}
           </div>
           <div className="grid gap-1.5">

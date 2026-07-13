@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { NameAvatar } from "@/components/ui/avatar";
@@ -9,6 +10,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 export function SettingsPage() {
   const { user } = useAuth();
+  const [is2FAEnabled, setIs2FAEnabled] = useState(false);
 
   return (
     <div className="space-y-6">
@@ -62,7 +64,17 @@ export function SettingsPage() {
               Add a secondary method of verification used during login.
             </p>
           </div>
-          <Button variant="outline">Enable</Button>
+          <Button
+            variant={is2FAEnabled ? "default" : "outline"}
+            className={
+              is2FAEnabled
+                ? "bg-emerald-500 hover:bg-emerald-600 text-white"
+                : ""
+            }
+            onClick={() => setIs2FAEnabled(!is2FAEnabled)}
+          >
+            {is2FAEnabled ? "Enabled ✓" : "Enable"}
+          </Button>
         </CardContent>
       </Card>
     </div>

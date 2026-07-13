@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import type { User, UserRole } from "@/types";
-import { supabase } from "@/lib/supabase";
 
 type Status = "loading" | "authed" | "anon";
 
@@ -31,12 +30,5 @@ export const useAuthStore = create<AuthState>((set) => ({
 }));
 
 // Hydrate the session on load and keep it in sync with Supabase Auth.
-supabase.auth.getSession().then(({ data }) => {
-  const u = data.session?.user;
-  useAuthStore.getState().setUser(u ? mapUser(u) : null);
-});
-
-supabase.auth.onAuthStateChange((_event, session) => {
-  const u = session?.user;
-  useAuthStore.getState().setUser(u ? mapUser(u) : null);
-});
+// Mock bypass: Instantly resolve to anon so the UI loads without Supabase keys
+useAuthStore.getState().setUser(null);

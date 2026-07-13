@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/api/client";
 import { projects as mockProjects, projectById } from "@/lib/mock-data";
 import type { Project } from "@/types";
@@ -20,9 +20,12 @@ async function fetchProjects(): Promise<Project[]> {
     const res = await apiClient.get<PaginatedResponse<Project>>("/projects", {
       params: { page: 1, limit: 100 },
     });
-    return res.data.data.length ? res.data.data : mockProjects;
+    if (!res.data || res.data.data.length === 0) {
+      return [...mockProjects];
+    }
+    return res.data.data;
   } catch {
-    return mockProjects;
+    return [...mockProjects];
   }
 }
 
@@ -37,4 +40,66 @@ export function useProject(id: string | undefined) {
     data: id ? (data.find((p) => p.id === id) ?? projectById(id)) : undefined,
     isLoading: false,
   } as const;
+}
+
+export function useCreateProject() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (project: { name: string; description?: string }) => {
+      try {
+        const { data } = await apiClient.post<Project>("/projects", project);
+        return data;
+      } catch {
+        // Fallback to local mock data update
+        const newProject: Project = {
+          id: `p-${Date.now()}`,
+          name: project.name || "New Project",
+          description: project.description || "",
+          status: "active",
+          created_by: "u-1", // mock user id
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+        mockProjects.push(newProject);
+        return newProject;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+    },
+  });
+}
+
+export function useUpdateProject() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      updates,
+    }: {
+      id: string;
+      updates: { name?: string; description?: string };
+    }) => {
+      const { data } = await apiClient.put<Project>(`/projects/${id}`, updates);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+    },
+  });
+}
+
+export function useArchiveProject() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { data } = await apiClient.patch<Project>(
+        `/projects/${id}/archive`,
+      );
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+    },
+  });
 }

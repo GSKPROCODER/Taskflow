@@ -4,87 +4,68 @@ import {
   FolderKanban,
   ListTodo,
   CalendarDays,
-  Search,
+  Users,
+  BarChart2,
   Bell,
   Settings,
-  ShieldCheck,
   Hexagon,
+  LogOut,
+  KanbanSquare,
+  MessageSquare,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
-import { projects as allProjects } from "@/lib/mock-data";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const navItemBase =
-  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors";
+  "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors";
 
 function itemClass({ isActive }: { isActive: boolean }) {
   return cn(
     navItemBase,
     isActive
-      ? "bg-brand-muted text-primary"
-      : "text-muted-foreground hover:bg-accent hover:text-foreground",
+      ? "bg-brand text-white shadow-sm"
+      : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground",
   );
 }
 
 export function Sidebar() {
-  const { user } = useAuth();
-  const featured = allProjects.filter((p) => p.status === "active").slice(0, 3);
+  const { user, signOut } = useAuth();
+
+  const handleLogout = async () => {
+    await signOut();
+  };
 
   return (
-    <aside className="flex h-full w-64 shrink-0 flex-col border-r border-border bg-sidebar">
-      {/* Org header */}
-      <div className="flex items-center gap-3 px-5 py-5">
-        <div className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+    <aside className="flex h-full w-full flex-col bg-sidebar">
+      {/* Brand Header */}
+      <div className="flex items-center gap-3 px-6 py-6">
+        <div className="flex size-8 items-center justify-center rounded-lg bg-brand text-white shadow-sm shadow-brand/20">
           <Hexagon className="size-5" fill="currentColor" />
         </div>
-        <div className="min-w-0">
-          <p className="truncate text-sm font-semibold">TaskFlow</p>
-          <p className="truncate text-xs text-muted-foreground">
-            {user?.email ?? "shadowwings.io"}
-          </p>
-        </div>
+        <p className="truncate text-lg font-bold text-white tracking-tight">
+          TaskFlow
+        </p>
       </div>
 
-      <div className="mx-5 border-t border-dashed border-border" />
-
-      {/* Primary nav */}
-      <nav className="flex-1 overflow-y-auto px-3 py-4">
+      <nav className="flex-1 overflow-y-auto px-4 py-2">
         <ul className="space-y-1">
           <li>
             <NavLink to="/dashboard" className={itemClass}>
               <Home className="size-4" />
-              Home
+              Dashboard
             </NavLink>
           </li>
           <li>
-            <NavLink to="/projects" end className={itemClass}>
+            <NavLink to="/projects" className={itemClass}>
               <FolderKanban className="size-4" />
               Projects
             </NavLink>
-            <ul className="mt-1 space-y-0.5 pl-9 text-sm">
-              {featured.map((p) => (
-                <li key={p.id}>
-                  <NavLink
-                    to={`/projects/${p.id}`}
-                    className={({ isActive }) =>
-                      cn(
-                        "block truncate rounded-md px-2 py-1.5 transition-colors",
-                        isActive
-                          ? "text-primary"
-                          : "text-muted-foreground hover:text-foreground",
-                      )
-                    }
-                  >
-                    {p.name}
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
           </li>
           <li>
             <NavLink to="/my-tasks" className={itemClass}>
               <ListTodo className="size-4" />
-              My Tasks
+              Tasks
             </NavLink>
           </li>
           <li>
@@ -93,52 +74,73 @@ export function Sidebar() {
               Calendar
             </NavLink>
           </li>
+          <li>
+            <NavLink to="/team" className={itemClass}>
+              <Users className="size-4" />
+              Team
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/reports" className={itemClass}>
+              <BarChart2 className="size-4" />
+              Reports
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/jira-sync" className={itemClass}>
+              <KanbanSquare className="size-4" />
+              Jira Sync
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/slack-feed" className={itemClass}>
+              <MessageSquare className="size-4" />
+              Slack Feed
+            </NavLink>
+          </li>
         </ul>
 
-        <p className="px-3 pb-2 pt-6 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-          Others
-        </p>
+        <div className="my-6 border-t border-sidebar-accent/50" />
+
         <ul className="space-y-1">
           <li>
             <NavLink to="/notifications" className={itemClass}>
               <Bell className="size-4" />
-              Notification
+              Notifications
             </NavLink>
           </li>
           <li>
             <NavLink to="/settings" className={itemClass}>
               <Settings className="size-4" />
-              Setting
+              Settings
             </NavLink>
-          </li>
-          <li>
-            <span
-              className={cn(
-                navItemBase,
-                "cursor-default text-muted-foreground/70",
-              )}
-            >
-              <Search className="size-4" />
-              Search
-            </span>
           </li>
         </ul>
       </nav>
 
-      {/* Promo card */}
-      <div className="m-4 rounded-2xl border border-border p-4">
-        <div className="flex size-8 items-center justify-center rounded-lg bg-muted">
-          <ShieldCheck className="size-4 text-foreground" />
+      {/* User Profile Footer */}
+      <div className="border-t border-sidebar-accent/50 p-4">
+        <div className="flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-sidebar-accent group cursor-pointer">
+          <Avatar className="size-8 bg-sidebar-accent text-white">
+            <AvatarFallback className="bg-brand text-xs">
+              {user?.name?.slice(0, 2).toUpperCase() ?? "ME"}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <p className="truncate text-sm font-medium text-white">
+              {user?.name ?? "Guest User"}
+            </p>
+            <p className="truncate text-xs text-sidebar-foreground/60">
+              {user?.role?.replace("_", " ") ?? "Viewer"}
+            </p>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="text-sidebar-foreground/50 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+            <LogOut className="size-4" />
+          </button>
         </div>
-        <p className="mt-3 text-sm font-semibold leading-snug">
-          Add an extra security to your account
-        </p>
-        <p className="mt-1 text-xs text-muted-foreground">
-          Add a secondary method of verification used during login.
-        </p>
-        <button className="mt-3 w-full rounded-lg bg-neutral-900 py-2 text-xs font-medium text-white transition-colors hover:bg-neutral-800">
-          Learn more
-        </button>
       </div>
     </aside>
   );

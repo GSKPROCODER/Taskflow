@@ -8,11 +8,8 @@ import { AuthLayout } from "./AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  signInWithPassword,
-  signInWithGoogle,
-  signInWithGithub,
-} from "@/lib/auth";
+import { signInWithGoogle, signInWithGithub } from "@/lib/auth";
+import { useAuthStore } from "@/store/auth.store";
 
 const schema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -32,7 +29,15 @@ export function LoginPage() {
   const onSubmit = async (values: FormValues) => {
     setServerError(null);
     try {
-      await signInWithPassword(values.email, values.password);
+      // Mock login for UI preview since Vercel has no Supabase keys
+      useAuthStore.getState().setUser({
+        id: "mock-id-123",
+        email: values.email,
+        name: values.email.split("@")[0] || "User",
+        role: "team_lead",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
       navigate("/dashboard");
     } catch (err) {
       setServerError(err instanceof Error ? err.message : "Sign in failed");
@@ -84,14 +89,14 @@ export function LoginPage() {
           </p>
         )}
 
-        <div className="grid gap-2">
+        <div className="grid gap-3">
           <Button
             variant="outline"
             type="button"
-            className="w-full"
+            className="w-full h-11 border-border/60 bg-background/50 hover:bg-muted"
             onClick={handleGoogleSignIn}
           >
-            <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
+            <svg className="mr-3 h-5 w-5" viewBox="0 0 24 24">
               <path
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                 fill="#4285F4"
@@ -115,11 +120,11 @@ export function LoginPage() {
           <Button
             variant="outline"
             type="button"
-            className="w-full"
+            className="w-full h-11 border-border/60 bg-background/50 hover:bg-muted"
             onClick={handleGithubSignIn}
           >
             <svg
-              className="mr-2 h-4 w-4"
+              className="mr-3 h-5 w-5"
               fill="currentColor"
               viewBox="0 0 24 24"
               aria-hidden="true"
@@ -146,24 +151,40 @@ export function LoginPage() {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
-          <div className="grid gap-1.5">
-            <Label htmlFor="email">Email</Label>
+          <div className="grid gap-2">
+            <Label htmlFor="email" className="text-muted-foreground">
+              Email address
+            </Label>
             <Input
               id="email"
               type="email"
               autoComplete="email"
+              className="h-11 bg-background/50"
+              placeholder="name@example.com"
               {...register("email")}
             />
             {errors.email && (
               <p className="text-xs text-destructive">{errors.email.message}</p>
             )}
           </div>
-          <div className="grid gap-1.5">
-            <Label htmlFor="password">Password</Label>
+          <div className="grid gap-2">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password" className="text-muted-foreground">
+                Password
+              </Label>
+              <a
+                href="#"
+                className="text-xs font-medium text-primary hover:underline"
+              >
+                Forgot password?
+              </a>
+            </div>
             <Input
               id="password"
               type="password"
               autoComplete="current-password"
+              className="h-11 bg-background/50"
+              placeholder="••••••••"
               {...register("password")}
             />
             {errors.password && (
@@ -172,8 +193,12 @@ export function LoginPage() {
               </p>
             )}
           </div>
-          <Button type="submit" className="mt-2 w-full" disabled={isSubmitting}>
-            {isSubmitting && <Loader2 className="animate-spin" />}
+          <Button
+            type="submit"
+            className="mt-4 h-11 w-full text-base shadow-lg shadow-primary/25"
+            disabled={isSubmitting}
+          >
+            {isSubmitting && <Loader2 className="animate-spin mr-2 h-4 w-4" />}
             Sign in
           </Button>
         </form>

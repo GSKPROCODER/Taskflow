@@ -16,6 +16,7 @@ export default defineConfig({
   },
   server: {
     port: 5173,
+    host: true, // Exposes to network (0.0.0.0) which helps bypass localhost resolution issues
     // `vite` dev serves the frontend only. Run `bun run dev:api` (vercel dev)
     // to serve the Hono API too; this proxy forwards /api to it.
     proxy: {

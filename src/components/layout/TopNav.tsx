@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useState, forwardRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   Search,
   Bell,
-  Star,
-  MoreHorizontal,
   ChevronDown,
   LogOut,
   User as UserIcon,
   Settings,
+  Moon,
+  Sun,
 } from "lucide-react";
 import { Breadcrumb, type Crumb } from "./Breadcrumb";
 import { NotificationsPanel } from "./NotificationsPanel";
@@ -25,6 +25,7 @@ import { cn } from "@/lib/utils";
 import { avatarColor, initials } from "@/lib/ui";
 import { useAuth } from "@/hooks/useAuth";
 import { useNotifications } from "@/hooks/useNotifications";
+import { useUIStore } from "@/store/ui.store";
 import { projectById, taskById } from "@/lib/mock-data";
 
 function useCrumbs(): Crumb[] {
@@ -67,13 +68,13 @@ function useCrumbs(): Crumb[] {
   }
 }
 
-function IconButton({
-  children,
-  active,
-  ...props
-}: React.ComponentProps<"button"> & { active?: boolean }) {
+const IconButton = forwardRef<
+  HTMLButtonElement,
+  React.ComponentProps<"button"> & { active?: boolean }
+>(({ children, active, ...props }, ref) => {
   return (
     <button
+      ref={ref}
       className={cn(
         "relative flex size-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
         active && "text-primary",
@@ -83,7 +84,8 @@ function IconButton({
       {children}
     </button>
   );
-}
+});
+IconButton.displayName = "IconButton";
 
 export function TopBar() {
   const crumbs = useCrumbs();
@@ -91,22 +93,44 @@ export function TopBar() {
   const { unreadCount } = useNotifications();
   const [bellOpen, setBellOpen] = useState(false);
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useUIStore();
 
   return (
-    <header className="flex items-center gap-4 border-b border-border bg-card px-6 py-3.5">
+    <header className="sticky top-0 z-40 flex items-center gap-4 border-b border-border bg-card px-6 py-3.5">
       <Breadcrumb items={crumbs} />
 
       <div className="relative ml-auto hidden w-full max-w-sm items-center md:flex">
         <Search className="absolute left-3 size-4 text-muted-foreground" />
         <input
-          placeholder="Search"
-          className="h-9 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          placeholder="Search anything..."
+          className="h-9 w-full rounded-lg border-0 bg-secondary pl-9 pr-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-brand/50 transition-all"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              const q = e.currentTarget.value.trim().toLowerCase();
+              if (!q) return;
+
+              if (q.includes("calendar")) navigate("/calendar");
+              else if (q.includes("project")) navigate("/projects");
+              else if (q.includes("team")) navigate("/team");
+              else if (q.includes("report")) navigate("/reports");
+              else if (q.includes("task")) navigate("/my-tasks");
+              else if (q.includes("setting")) navigate("/settings");
+              else if (q.includes("dash")) navigate("/dashboard");
+
+              e.currentTarget.value = "";
+              e.currentTarget.blur();
+            }
+          }}
         />
       </div>
 
-      <div className="flex items-center gap-2">
-        <IconButton title="Favorites">
-          <Star className="size-4" />
+      <div className="flex items-center gap-4">
+        <IconButton title="Toggle Theme" onClick={toggleTheme}>
+          {theme === "dark" ? (
+            <Moon className="size-4" />
+          ) : (
+            <Sun className="size-4" />
+          )}
         </IconButton>
 
         <DropdownMenu open={bellOpen} onOpenChange={setBellOpen}>
@@ -114,7 +138,7 @@ export function TopBar() {
             <IconButton title="Notifications" active={bellOpen}>
               <Bell className="size-4" />
               {unreadCount > 0 && (
-                <span className="absolute right-2 top-2 size-2 rounded-full bg-rose-500 ring-2 ring-card" />
+                <span className="absolute right-2 top-2 size-2 rounded-full bg-rose-500 ring-2 ring-white" />
               )}
             </IconButton>
           </DropdownMenuTrigger>
@@ -128,10 +152,6 @@ export function TopBar() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <IconButton title="More">
-          <MoreHorizontal className="size-4" />
-        </IconButton>
-
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="flex items-center gap-2 rounded-lg p-1 pr-2 transition-colors hover:bg-accent">
@@ -143,7 +163,15 @@ export function TopBar() {
               >
                 {initials(user?.name ?? "U")}
               </span>
-              <ChevronDown className="size-4 text-muted-foreground" />
+              <div className="hidden flex-col items-start text-left md:flex">
+                <span className="text-sm font-semibold leading-tight text-foreground">
+                  {user?.name ?? "User"}
+                </span>
+                <span className="text-[11px] font-medium leading-tight text-muted-foreground capitalize">
+                  {user?.role?.replace("_", " ") ?? "Developer"}
+                </span>
+              </div>
+              <ChevronDown className="ml-1 size-4 text-muted-foreground" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
