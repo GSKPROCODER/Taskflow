@@ -14,7 +14,7 @@ test.describe("TaskFlow Critical User Journeys", () => {
     // Fill credentials (assuming test@example.com is seeded or already registered)
     await page.fill('input[type="email"]', testEmail);
     await page.fill('input[type="password"]', testPassword);
-    
+
     // Check if we have Sign In instead of Log in
     await page.click('button[type="submit"]');
 
