@@ -56,22 +56,40 @@ export function DashboardPage() {
               <DropdownMenuLabel>Timeframe</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => handleFilterChange("all")}>
-                {activeFilter === "all" ? <Check className="mr-2 size-4" /> : <span className="mr-2 size-4" />}
+                {activeFilter === "all" ? (
+                  <Check className="mr-2 size-4" />
+                ) : (
+                  <span className="mr-2 size-4" />
+                )}
                 All Time
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleFilterChange("this-week")}>
-                {activeFilter === "this-week" ? <Check className="mr-2 size-4" /> : <span className="mr-2 size-4" />}
+                {activeFilter === "this-week" ? (
+                  <Check className="mr-2 size-4" />
+                ) : (
+                  <span className="mr-2 size-4" />
+                )}
                 This Week
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleFilterChange("this-month")}>
-                {activeFilter === "this-month" ? <Check className="mr-2 size-4" /> : <span className="mr-2 size-4" />}
+              <DropdownMenuItem
+                onClick={() => handleFilterChange("this-month")}
+              >
+                {activeFilter === "this-month" ? (
+                  <Check className="mr-2 size-4" />
+                ) : (
+                  <span className="mr-2 size-4" />
+                )}
                 This Month
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuLabel>Project Type</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => handleFilterChange("active")}>
-                {activeFilter === "active" ? <Check className="mr-2 size-4" /> : <span className="mr-2 size-4" />}
+                {activeFilter === "active" ? (
+                  <Check className="mr-2 size-4" />
+                ) : (
+                  <span className="mr-2 size-4" />
+                )}
                 Active Only
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -85,19 +103,19 @@ export function DashboardPage() {
         animate="show"
         className="grid grid-cols-2 gap-4 lg:grid-cols-5"
       >
-        <StatCard 
-          label="Total Projects" 
-          value={metrics?.totalProjects ?? 0} 
-          icon={Folder} 
-          tone="bg-blue-100 text-blue-600" 
-          delta="↑ 2 this month" 
+        <StatCard
+          label="Total Projects"
+          value={metrics?.totalProjects ?? 0}
+          icon={Folder}
+          tone="bg-blue-100 text-blue-600"
+          delta="↑ 2 this month"
         />
-        <StatCard 
-          label="Total Tasks" 
-          value={metrics?.totalTasks ?? 0} 
-          icon={ListTodo} 
-          tone="bg-purple-100 text-purple-600" 
-          delta="↑ 16 this week" 
+        <StatCard
+          label="Total Tasks"
+          value={metrics?.totalTasks ?? 0}
+          icon={ListTodo}
+          tone="bg-purple-100 text-purple-600"
+          delta="↑ 16 this week"
         />
         <StatCard
           label="In Progress"

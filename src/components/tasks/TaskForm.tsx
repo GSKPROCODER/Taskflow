@@ -26,12 +26,21 @@ import {
 } from "@/components/ui/select";
 import { useCreateTask } from "@/hooks/useTasks";
 
-import { createTaskSchema, type CreateTaskInput } from "../../../server/validators/task.schema";
+import {
+  createTaskSchema,
+  type CreateTaskInput,
+} from "../../../server/validators/task.schema";
 
 type FormValues = CreateTaskInput;
 
 /** Create-task dialog (UI only — logs the payload for now). */
-export function TaskForm({ trigger, projectId }: { trigger?: React.ReactNode, projectId: string }) {
+export function TaskForm({
+  trigger,
+  projectId,
+}: {
+  trigger?: React.ReactNode;
+  projectId: string;
+}) {
   const [open, setOpen] = useState(false);
   const createTask = useCreateTask(projectId);
   const {
@@ -58,7 +67,7 @@ export function TaskForm({ trigger, projectId }: { trigger?: React.ReactNode, pr
           reset();
           setOpen(false);
         },
-      }
+      },
     );
   };
 
@@ -84,12 +93,18 @@ export function TaskForm({ trigger, projectId }: { trigger?: React.ReactNode, pr
             <Input
               id="title"
               placeholder="e.g. Build auth flow"
-              className={errors.title ? "border-destructive focus-visible:ring-destructive" : ""}
+              className={
+                errors.title
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : ""
+              }
               {...register("title")}
             />
             {errors.title && (
               <p className="flex items-center gap-1 text-[13px] font-medium text-destructive mt-1">
-                <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-destructive/10">!</span>
+                <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-destructive/10">
+                  !
+                </span>
                 {errors.title.message}
               </p>
             )}

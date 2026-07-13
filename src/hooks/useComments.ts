@@ -43,7 +43,10 @@ export function useCreateComment(taskId: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: CreateCommentInput) => {
-      const res = await apiClient.post<Comment>(`/tasks/${taskId}/comments`, input);
+      const res = await apiClient.post<Comment>(
+        `/tasks/${taskId}/comments`,
+        input,
+      );
       return res.data;
     },
     onSuccess: () => {

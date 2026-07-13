@@ -26,19 +26,41 @@ export function ProjectDetailPage() {
   const [tab, setTab] = useState("tasks");
   const [statusFilter, setStatusFilter] = useState("all");
 
-  if (isLoading) return <div className="p-8 text-center text-muted-foreground">Loading project...</div>;
+  if (isLoading)
+    return (
+      <div className="p-8 text-center text-muted-foreground">
+        Loading project...
+      </div>
+    );
   if (!project) return <NotFoundPage />;
 
-  const filteredTasks = statusFilter === "all" 
-    ? tasks 
-    : tasks.filter((t) => t.status === statusFilter);
+  const filteredTasks =
+    statusFilter === "all"
+      ? tasks
+      : tasks.filter((t) => t.status === statusFilter);
 
   const statuses = [
     { id: "all", label: "All", count: tasks.length },
-    { id: "todo", label: "Todo", count: tasks.filter(t => t.status === "todo").length },
-    { id: "in_progress", label: "In Progress", count: tasks.filter(t => t.status === "in_progress").length },
-    { id: "testing", label: "Testing", count: tasks.filter(t => t.status === "testing").length },
-    { id: "done", label: "Done", count: tasks.filter(t => t.status === "done").length },
+    {
+      id: "todo",
+      label: "Todo",
+      count: tasks.filter((t) => t.status === "todo").length,
+    },
+    {
+      id: "in_progress",
+      label: "In Progress",
+      count: tasks.filter((t) => t.status === "in_progress").length,
+    },
+    {
+      id: "testing",
+      label: "Testing",
+      count: tasks.filter((t) => t.status === "testing").length,
+    },
+    {
+      id: "done",
+      label: "Done",
+      count: tasks.filter((t) => t.status === "done").length,
+    },
   ];
 
   return (
@@ -84,24 +106,26 @@ export function ProjectDetailPage() {
                   onClick={() => setStatusFilter(status.id)}
                   className={cn(
                     "flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
-                    statusFilter === status.id 
+                    statusFilter === status.id
                       ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
+                      : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground",
                   )}
                 >
                   {status.label}
-                  <span className={cn(
-                    "flex h-5 items-center justify-center rounded-full px-2 text-xs",
-                    statusFilter === status.id
-                      ? "bg-primary-foreground/20"
-                      : "bg-background"
-                  )}>
+                  <span
+                    className={cn(
+                      "flex h-5 items-center justify-center rounded-full px-2 text-xs",
+                      statusFilter === status.id
+                        ? "bg-primary-foreground/20"
+                        : "bg-background",
+                    )}
+                  >
                     {status.count}
                   </span>
                 </button>
               ))}
             </div>
-            
+
             <div className="overflow-hidden bg-card rounded-[1rem] shadow-sm shadow-slate-200/50 border border-border">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm whitespace-nowrap">
@@ -110,14 +134,22 @@ export function ProjectDetailPage() {
                       <th className="px-6 py-4 font-medium">Task</th>
                       <th className="px-6 py-4 font-medium">Priority</th>
                       <th className="px-6 py-4 font-medium">Due Date</th>
-                      <th className="px-6 py-4 font-medium text-right">Status</th>
+                      <th className="px-6 py-4 font-medium text-right">
+                        Status
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border/60 bg-card">
                     {filteredTasks.map((task) => (
-                      <tr key={task.id} className="group transition-colors hover:bg-slate-50/50">
+                      <tr
+                        key={task.id}
+                        className="group transition-colors hover:bg-slate-50/50"
+                      >
                         <td className="px-6 py-4">
-                          <Link to={`/tasks/${task.id}`} className="font-semibold text-foreground hover:text-brand transition-colors block truncate max-w-[250px]">
+                          <Link
+                            to={`/tasks/${task.id}`}
+                            className="font-semibold text-foreground hover:text-brand transition-colors block truncate max-w-[250px]"
+                          >
                             {task.title}
                           </Link>
                         </td>
@@ -136,7 +168,10 @@ export function ProjectDetailPage() {
                     ))}
                     {filteredTasks.length === 0 && (
                       <tr>
-                        <td colSpan={4} className="px-6 py-12 text-center text-muted-foreground">
+                        <td
+                          colSpan={4}
+                          className="px-6 py-12 text-center text-muted-foreground"
+                        >
                           No tasks found.
                         </td>
                       </tr>
@@ -159,11 +194,17 @@ export function ProjectDetailPage() {
                 </p>
                 <dl className="mt-6 grid grid-cols-2 gap-6 text-sm">
                   <div className="p-4 rounded-lg bg-slate-50 border border-border/50">
-                    <dt className="text-muted-foreground font-medium">Total tasks</dt>
-                    <dd className="mt-1 text-2xl font-bold text-foreground">{tasks.length}</dd>
+                    <dt className="text-muted-foreground font-medium">
+                      Total tasks
+                    </dt>
+                    <dd className="mt-1 text-2xl font-bold text-foreground">
+                      {tasks.length}
+                    </dd>
                   </div>
                   <div className="p-4 rounded-lg bg-slate-50 border border-border/50">
-                    <dt className="text-muted-foreground font-medium">Status</dt>
+                    <dt className="text-muted-foreground font-medium">
+                      Status
+                    </dt>
                     <dd className="mt-1 text-2xl font-bold text-foreground capitalize">
                       {project.status}
                     </dd>

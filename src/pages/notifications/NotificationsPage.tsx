@@ -28,11 +28,14 @@ export function NotificationsPage() {
           ? {
               ...n,
               kind: "update",
-              action: action === "Approve" ? "accepted the invite for" : "declined the invite for",
+              action:
+                action === "Approve"
+                  ? "accepted the invite for"
+                  : "declined the invite for",
               unread: false,
             }
-          : n
-      )
+          : n,
+      ),
     );
   };
 
@@ -42,7 +45,11 @@ export function NotificationsPage() {
         title="Notifications"
         subtitle={`You have ${unreadCount} unread notification${unreadCount === 1 ? "" : "s"}.`}
         actions={
-          <Button variant="outline" onClick={markAllRead} disabled={unreadCount === 0}>
+          <Button
+            variant="outline"
+            onClick={markAllRead}
+            disabled={unreadCount === 0}
+          >
             <CheckCheck /> Mark all read
           </Button>
         }
@@ -85,10 +92,19 @@ export function NotificationsPage() {
                   </p>
                   {n.kind === "invite" && (
                     <div className="mt-3 flex gap-2">
-                      <Button size="sm" variant="outline" onClick={() => handleInviteAction(n.id, "Cancel")}>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleInviteAction(n.id, "Cancel")}
+                      >
                         Cancel
                       </Button>
-                      <Button size="sm" onClick={() => handleInviteAction(n.id, "Approve")}>Approve</Button>
+                      <Button
+                        size="sm"
+                        onClick={() => handleInviteAction(n.id, "Approve")}
+                      >
+                        Approve
+                      </Button>
                     </div>
                   )}
                 </div>

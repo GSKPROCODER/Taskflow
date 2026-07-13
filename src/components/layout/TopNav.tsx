@@ -68,22 +68,23 @@ function useCrumbs(): Crumb[] {
   }
 }
 
-const IconButton = forwardRef<HTMLButtonElement, React.ComponentProps<"button"> & { active?: boolean }>(
-  ({ children, active, ...props }, ref) => {
-    return (
-      <button
-        ref={ref}
-        className={cn(
-          "relative flex size-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
-          active && "text-primary",
-        )}
-        {...props}
-      >
-        {children}
-      </button>
-    );
-  }
-);
+const IconButton = forwardRef<
+  HTMLButtonElement,
+  React.ComponentProps<"button"> & { active?: boolean }
+>(({ children, active, ...props }, ref) => {
+  return (
+    <button
+      ref={ref}
+      className={cn(
+        "relative flex size-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
+        active && "text-primary",
+      )}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+});
 IconButton.displayName = "IconButton";
 
 export function TopBar() {
@@ -107,7 +108,7 @@ export function TopBar() {
             if (e.key === "Enter") {
               const q = e.currentTarget.value.trim().toLowerCase();
               if (!q) return;
-              
+
               if (q.includes("calendar")) navigate("/calendar");
               else if (q.includes("project")) navigate("/projects");
               else if (q.includes("team")) navigate("/team");
@@ -115,7 +116,7 @@ export function TopBar() {
               else if (q.includes("task")) navigate("/my-tasks");
               else if (q.includes("setting")) navigate("/settings");
               else if (q.includes("dash")) navigate("/dashboard");
-              
+
               e.currentTarget.value = "";
               e.currentTarget.blur();
             }
@@ -125,7 +126,11 @@ export function TopBar() {
 
       <div className="flex items-center gap-4">
         <IconButton title="Toggle Theme" onClick={toggleTheme}>
-          {theme === "dark" ? <Moon className="size-4" /> : <Sun className="size-4" />}
+          {theme === "dark" ? (
+            <Moon className="size-4" />
+          ) : (
+            <Sun className="size-4" />
+          )}
         </IconButton>
 
         <DropdownMenu open={bellOpen} onOpenChange={setBellOpen}>
@@ -147,7 +152,6 @@ export function TopBar() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="flex items-center gap-2 rounded-lg p-1 pr-2 transition-colors hover:bg-accent">
@@ -160,7 +164,9 @@ export function TopBar() {
                 {initials(user?.name ?? "U")}
               </span>
               <div className="hidden flex-col items-start text-left md:flex">
-                <span className="text-sm font-semibold leading-tight text-foreground">{user?.name ?? "User"}</span>
+                <span className="text-sm font-semibold leading-tight text-foreground">
+                  {user?.name ?? "User"}
+                </span>
                 <span className="text-[11px] font-medium leading-tight text-muted-foreground capitalize">
                   {user?.role?.replace("_", " ") ?? "Developer"}
                 </span>

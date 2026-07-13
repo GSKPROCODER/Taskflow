@@ -7,19 +7,23 @@ import { cn } from "@/lib/utils";
 import { avatarColor, initials } from "@/lib/ui";
 import { relativeTime } from "@/lib/format";
 import { Button } from "@/components/ui/button";
-import { notifications as initialNotifications, MOCK_NOW, type AppNotification } from "@/lib/mock-data";
+import {
+  notifications as initialNotifications,
+  MOCK_NOW,
+  type AppNotification,
+} from "@/lib/mock-data";
 
 const TABS = ["View All", "Files", "Jobs", "Invites"] as const;
 
-function NotificationRow({ 
-  n, 
-  onAction 
-}: { 
-  n: AppNotification; 
+function NotificationRow({
+  n,
+  onAction,
+}: {
+  n: AppNotification;
   onAction: (id: string, action: "Approve" | "Cancel") => void;
 }) {
   return (
-    <motion.div 
+    <motion.div
       layout
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
@@ -45,10 +49,16 @@ function NotificationRow({
         </p>
         {n.kind === "invite" && (
           <div className="mt-2 flex gap-2">
-            <Button size="sm" variant="outline" onClick={() => onAction(n.id, "Cancel")}>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => onAction(n.id, "Cancel")}
+            >
               Cancel
             </Button>
-            <Button size="sm" onClick={() => onAction(n.id, "Approve")}>Approve</Button>
+            <Button size="sm" onClick={() => onAction(n.id, "Approve")}>
+              Approve
+            </Button>
           </div>
         )}
       </div>
@@ -86,11 +96,14 @@ export function NotificationsPanel() {
           ? {
               ...n,
               kind: "update", // update kind to hide buttons
-              action: action === "Approve" ? "accepted the invite for" : "declined the invite for",
+              action:
+                action === "Approve"
+                  ? "accepted the invite for"
+                  : "declined the invite for",
               unread: false,
             }
-          : n
-      )
+          : n,
+      ),
     );
   };
 
@@ -113,7 +126,11 @@ export function NotificationsPanel() {
           >
             <CheckCheck className="size-4" />
           </button>
-          <Link to="/settings" className="rounded-md p-1.5 hover:bg-accent" title="Settings">
+          <Link
+            to="/settings"
+            className="rounded-md p-1.5 hover:bg-accent"
+            title="Settings"
+          >
             <Settings2 className="size-4" />
           </Link>
         </div>
@@ -122,12 +139,16 @@ export function NotificationsPanel() {
       <div className="flex items-center gap-1 px-2">
         {TABS.map((t) => {
           const active = t === tab;
-          const count = t === "View All" 
-            ? notifications.length 
-            : t === "Files" ? notifications.filter(n => n.kind === "document").length
-            : t === "Jobs" ? notifications.filter(n => n.kind === "update").length
-            : t === "Invites" ? notifications.filter(n => n.kind === "invite").length
-            : 0;
+          const count =
+            t === "View All"
+              ? notifications.length
+              : t === "Files"
+                ? notifications.filter((n) => n.kind === "document").length
+                : t === "Jobs"
+                  ? notifications.filter((n) => n.kind === "update").length
+                  : t === "Invites"
+                    ? notifications.filter((n) => n.kind === "invite").length
+                    : 0;
 
           return (
             <button
@@ -154,9 +175,9 @@ export function NotificationsPanel() {
               <NotificationRow key={n.id} n={n} onAction={handleInviteAction} />
             ))
           ) : (
-            <motion.div 
-              initial={{ opacity: 0 }} 
-              animate={{ opacity: 1 }} 
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               className="py-12 text-center text-sm text-muted-foreground"
             >
               No {tab.toLowerCase()} notifications found.

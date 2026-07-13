@@ -9,12 +9,19 @@ export function ProjectsPage() {
   const active = projects.filter((p: Project) => p.status === "active");
   const archived = projects.filter((p: Project) => p.status === "archived");
 
-  if (isLoading) return <div className="p-8 text-center text-muted-foreground">Loading projects...</div>;
+  if (isLoading)
+    return (
+      <div className="p-8 text-center text-muted-foreground">
+        Loading projects...
+      </div>
+    );
 
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">Projects</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          Projects
+        </h1>
         <div className="flex items-center gap-4">
           <div className="relative hidden md:block w-72">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />

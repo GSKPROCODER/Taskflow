@@ -148,14 +148,24 @@ export function SignupPage() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="name" className="text-muted-foreground">Full name</Label>
-            <Input id="name" autoComplete="name" className="h-11 bg-background/50" placeholder="Jane Doe" {...register("name")} />
+            <Label htmlFor="name" className="text-muted-foreground">
+              Full name
+            </Label>
+            <Input
+              id="name"
+              autoComplete="name"
+              className="h-11 bg-background/50"
+              placeholder="Jane Doe"
+              {...register("name")}
+            />
             {errors.name && (
               <p className="text-xs text-destructive">{errors.name.message}</p>
             )}
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="email" className="text-muted-foreground">Email address</Label>
+            <Label htmlFor="email" className="text-muted-foreground">
+              Email address
+            </Label>
             <Input
               id="email"
               type="email"
@@ -169,7 +179,9 @@ export function SignupPage() {
             )}
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="password" className="text-muted-foreground">Password</Label>
+            <Label htmlFor="password" className="text-muted-foreground">
+              Password
+            </Label>
             <Input
               id="password"
               type="password"
@@ -184,7 +196,11 @@ export function SignupPage() {
               </p>
             )}
           </div>
-          <Button type="submit" className="mt-4 h-11 w-full text-base shadow-lg shadow-primary/25" disabled={isSubmitting}>
+          <Button
+            type="submit"
+            className="mt-4 h-11 w-full text-base shadow-lg shadow-primary/25"
+            disabled={isSubmitting}
+          >
             {isSubmitting && <Loader2 className="animate-spin mr-2 h-4 w-4" />}
             Create account
           </Button>

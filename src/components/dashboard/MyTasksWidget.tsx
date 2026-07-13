@@ -31,14 +31,21 @@ export function MyTasksWidget({ tasks }: { tasks: Task[] }) {
             </thead>
             <tbody className="divide-y divide-border/50 bg-card">
               {tasks.slice(0, 5).map((task) => (
-                <tr key={task.id} className="group transition-colors hover:bg-slate-50/50">
+                <tr
+                  key={task.id}
+                  className="group transition-colors hover:bg-slate-50/50"
+                >
                   <td className="px-6 py-3">
-                    <Link to={`/tasks/${task.id}`} className="font-medium text-foreground hover:text-brand transition-colors block truncate max-w-[200px]">
+                    <Link
+                      to={`/tasks/${task.id}`}
+                      className="font-medium text-foreground hover:text-brand transition-colors block truncate max-w-[200px]"
+                    >
                       {task.title}
                     </Link>
                   </td>
                   <td className="px-6 py-3 text-muted-foreground truncate max-w-[150px]">
-                    {(task as Task & { projects?: { name: string } }).projects?.name ?? "—"}
+                    {(task as Task & { projects?: { name: string } }).projects
+                      ?.name ?? "—"}
                   </td>
                   <td className="px-6 py-3">
                     <PriorityBadge priority={task.priority} />
@@ -55,7 +62,10 @@ export function MyTasksWidget({ tasks }: { tasks: Task[] }) {
               ))}
               {tasks.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-muted-foreground">
+                  <td
+                    colSpan={5}
+                    className="px-6 py-8 text-center text-muted-foreground"
+                  >
                     No tasks assigned to you.
                   </td>
                 </tr>

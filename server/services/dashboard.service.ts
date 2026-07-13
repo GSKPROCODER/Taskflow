@@ -3,7 +3,7 @@ import { AppError } from "../lib/errors";
 
 export async function getMetrics() {
   // For MVP, we get counts of all projects and tasks, simulating an org-level dashboard.
-  
+
   const { count: totalProjects, error: err1 } = await supabaseAdmin
     .from("projects")
     .select("*", { count: "exact", head: true });
@@ -52,8 +52,23 @@ export async function getMetrics() {
     .select("*", { count: "exact", head: true })
     .eq("priority", "critical");
 
-  if (err1 || err2 || err3 || err4 || err5 || err6 || err7 || err8 || err9 || err10) {
-    throw new AppError("Failed to fetch dashboard metrics", "INTERNAL_ERROR", 500);
+  if (
+    err1 ||
+    err2 ||
+    err3 ||
+    err4 ||
+    err5 ||
+    err6 ||
+    err7 ||
+    err8 ||
+    err9 ||
+    err10
+  ) {
+    throw new AppError(
+      "Failed to fetch dashboard metrics",
+      "INTERNAL_ERROR",
+      500,
+    );
   }
 
   return {
@@ -68,14 +83,16 @@ export async function getMetrics() {
       high: highPriority ?? 0,
       medium: mediumPriority ?? 0,
       low: lowPriority ?? 0,
-    }
+    },
   };
 }
 
 export async function getActivity() {
   const { data, error } = await supabaseAdmin
     .from("comments")
-    .select("*, users:user_id(name), tasks:task_id(title, projects:project_id(name))")
+    .select(
+      "*, users:user_id(name), tasks:task_id(title, projects:project_id(name))",
+    )
     .eq("type", "system_log")
     .order("created_at", { ascending: false })
     .limit(10);
@@ -97,7 +114,7 @@ export async function getActivity() {
     return {
       id: l.id,
       actor: l.users?.name ?? "System",
-      action: l.content, 
+      action: l.content,
       target: `${l.tasks?.title} (${l.tasks?.projects?.name ?? "Unknown"})`,
       created_at: l.created_at,
     };

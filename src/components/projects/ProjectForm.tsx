@@ -19,7 +19,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-import { createProjectSchema, type CreateProjectInput } from "../../../server/validators/project.schema";
+import {
+  createProjectSchema,
+  type CreateProjectInput,
+} from "../../../server/validators/project.schema";
 
 type FormValues = CreateProjectInput;
 
@@ -44,7 +47,7 @@ export function ProjectForm({ trigger }: { trigger?: React.ReactNode }) {
       onError: (err) => {
         console.error("Failed to create project", err);
         // Could show a toast error here
-      }
+      },
     });
   };
 
@@ -70,12 +73,18 @@ export function ProjectForm({ trigger }: { trigger?: React.ReactNode }) {
             <Input
               id="name"
               placeholder="e.g. Craftboard Project"
-              className={errors.name ? "border-destructive focus-visible:ring-destructive" : ""}
+              className={
+                errors.name
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : ""
+              }
               {...register("name")}
             />
             {errors.name && (
               <p className="flex items-center gap-1 text-[13px] font-medium text-destructive mt-1">
-                <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-destructive/10">!</span>
+                <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-destructive/10">
+                  !
+                </span>
                 {errors.name.message}
               </p>
             )}

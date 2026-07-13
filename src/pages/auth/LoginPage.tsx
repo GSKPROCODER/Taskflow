@@ -8,10 +8,7 @@ import { AuthLayout } from "./AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  signInWithGoogle,
-  signInWithGithub,
-} from "@/lib/auth";
+import { signInWithGoogle, signInWithGithub } from "@/lib/auth";
 import { useAuthStore } from "@/store/auth.store";
 
 const schema = z.object({
@@ -155,7 +152,9 @@ export function LoginPage() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="email" className="text-muted-foreground">Email address</Label>
+            <Label htmlFor="email" className="text-muted-foreground">
+              Email address
+            </Label>
             <Input
               id="email"
               type="email"
@@ -170,8 +169,15 @@ export function LoginPage() {
           </div>
           <div className="grid gap-2">
             <div className="flex items-center justify-between">
-              <Label htmlFor="password" className="text-muted-foreground">Password</Label>
-              <a href="#" className="text-xs font-medium text-primary hover:underline">Forgot password?</a>
+              <Label htmlFor="password" className="text-muted-foreground">
+                Password
+              </Label>
+              <a
+                href="#"
+                className="text-xs font-medium text-primary hover:underline"
+              >
+                Forgot password?
+              </a>
             </div>
             <Input
               id="password"
@@ -187,7 +193,11 @@ export function LoginPage() {
               </p>
             )}
           </div>
-          <Button type="submit" className="mt-4 h-11 w-full text-base shadow-lg shadow-primary/25" disabled={isSubmitting}>
+          <Button
+            type="submit"
+            className="mt-4 h-11 w-full text-base shadow-lg shadow-primary/25"
+            disabled={isSubmitting}
+          >
             {isSubmitting && <Loader2 className="animate-spin mr-2 h-4 w-4" />}
             Sign in
           </Button>

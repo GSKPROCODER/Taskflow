@@ -21,16 +21,16 @@ test.describe("TaskFlow Critical User Journeys", () => {
 
     // Should redirect to dashboard
     await expect(page).toHaveURL(/.*\/dashboard/);
-    
+
     // Verify dashboard components load
     await expect(page.locator("text=Dashboard Overview")).toBeVisible();
     await expect(page.locator("text=Total Tasks")).toBeVisible();
   });
 
   test("Team Lead Journey: Create Project & Task", async ({ page }) => {
-    // Note: This test assumes the test user is a team_lead or developer 
+    // Note: This test assumes the test user is a team_lead or developer
     // that can see projects. If RBAC strictly requires team_lead, this user must be one.
-    
+
     // Log in directly for this test
     await page.goto("/login");
     await page.fill('input[type="email"]', testEmail);
@@ -48,16 +48,18 @@ test.describe("TaskFlow Critical User Journeys", () => {
 
     // Click to open modal
     await newProjectBtn.click();
-    
+
     // Fill the project form
     await page.fill('input[name="name"]', "E2E Automated Project");
     await page.fill('textarea[name="description"]', "Created by Playwright");
-    
+
     // Check if the 'Create Project' submit button exists and click it
     await page.click('button:has-text("Create Project")');
 
     // Verify the project appears in the list (or it redirects, depending on flow)
     // The UI should show "E2E Automated Project"
-    await expect(page.locator("text=E2E Automated Project").first()).toBeVisible();
+    await expect(
+      page.locator("text=E2E Automated Project").first(),
+    ).toBeVisible();
   });
 });

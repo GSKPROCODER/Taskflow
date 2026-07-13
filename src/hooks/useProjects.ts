@@ -73,7 +73,13 @@ export function useCreateProject() {
 export function useUpdateProject() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, updates }: { id: string; updates: { name?: string; description?: string } }) => {
+    mutationFn: async ({
+      id,
+      updates,
+    }: {
+      id: string;
+      updates: { name?: string; description?: string };
+    }) => {
       const { data } = await apiClient.put<Project>(`/projects/${id}`, updates);
       return data;
     },
@@ -87,7 +93,9 @@ export function useArchiveProject() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { data } = await apiClient.patch<Project>(`/projects/${id}/archive`);
+      const { data } = await apiClient.patch<Project>(
+        `/projects/${id}/archive`,
+      );
       return data;
     },
     onSuccess: () => {

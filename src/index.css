@@ -41,46 +41,46 @@
   --radius: 1rem;
 
   /* App surfaces */
-  --background: #F8F9FA; /* Light gray/slate-50 background for main content */
-  --foreground: #0F172A;
-  --card: #FFFFFF;
-  --card-foreground: #0F172A;
-  --popover: #FFFFFF;
-  --popover-foreground: #0F172A;
+  --background: #f8f9fa; /* Light gray/slate-50 background for main content */
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
 
   /* Brand primary */
-  --primary: #6C4CF1;
-  --primary-foreground: #FFFFFF;
-  --brand: #6C4CF1;
-  --brand-foreground: #FFFFFF;
-  --brand-muted: #F3F0FF;
+  --primary: #6c4cf1;
+  --primary-foreground: #ffffff;
+  --brand: #6c4cf1;
+  --brand-foreground: #ffffff;
+  --brand-muted: #f3f0ff;
 
-  --secondary: #F1F5F9;
-  --secondary-foreground: #0F172A;
-  --muted: #F1F5F9;
-  --muted-foreground: #64748B;
-  --accent: #F8FAFC;
-  --accent-foreground: #0F172A;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f8fafc;
+  --accent-foreground: #0f172a;
 
-  --destructive: #EF4444;
-  --destructive-foreground: #FFFFFF;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
 
-  --border: #E2E8F0;
-  --input: #E2E8F0;
-  --ring: #6C4CF1;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #6c4cf1;
 
   /* Sidebar */
-  --sidebar: #0B1121; /* Dark navy */
-  --sidebar-foreground: #F8FAFC;
-  --sidebar-accent: #1E293B;
-  --sidebar-accent-foreground: #F8FAFC;
+  --sidebar: #0b1121; /* Dark navy */
+  --sidebar-foreground: #f8fafc;
+  --sidebar-accent: #1e293b;
+  --sidebar-accent-foreground: #f8fafc;
 }
 
 .dark {
   /* App surfaces (GitHub Dark) */
-  --background: #0d1117; 
+  --background: #0d1117;
   --foreground: #c9d1d9;
-  --card: #161b22; 
+  --card: #161b22;
   --card-foreground: #c9d1d9;
   --popover: #161b22;
   --popover-foreground: #c9d1d9;
@@ -92,22 +92,22 @@
   --brand-foreground: #ffffff;
   --brand-muted: #1f3a5f;
 
-  --secondary: #21262d; 
+  --secondary: #21262d;
   --secondary-foreground: #c9d1d9;
   --muted: #21262d;
-  --muted-foreground: #8b949e; 
+  --muted-foreground: #8b949e;
   --accent: #21262d;
   --accent-foreground: #c9d1d9;
 
   --destructive: #f85149;
   --destructive-foreground: #ffffff;
 
-  --border: #30363d; 
+  --border: #30363d;
   --input: #21262d;
   --ring: #58a6ff;
 
   /* Sidebar */
-  --sidebar: #010409; 
+  --sidebar: #010409;
   --sidebar-foreground: #c9d1d9;
   --sidebar-accent: #161b22;
   --sidebar-accent-foreground: #c9d1d9;
@@ -126,7 +126,7 @@
 
   body {
     @apply bg-background text-foreground font-sans;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
   }
 
   /* Thin, subtle scrollbars to match the clean aesthetic */

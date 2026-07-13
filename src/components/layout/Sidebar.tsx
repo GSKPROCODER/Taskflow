@@ -11,7 +11,7 @@ import {
   Hexagon,
   LogOut,
   KanbanSquare,
-  MessageSquare
+  MessageSquare,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -43,7 +43,9 @@ export function Sidebar() {
         <div className="flex size-8 items-center justify-center rounded-lg bg-brand text-white shadow-sm shadow-brand/20">
           <Hexagon className="size-5" fill="currentColor" />
         </div>
-        <p className="truncate text-lg font-bold text-white tracking-tight">TaskFlow</p>
+        <p className="truncate text-lg font-bold text-white tracking-tight">
+          TaskFlow
+        </p>
       </div>
 
       <nav className="flex-1 overflow-y-auto px-4 py-2">
@@ -99,7 +101,7 @@ export function Sidebar() {
         </ul>
 
         <div className="my-6 border-t border-sidebar-accent/50" />
-        
+
         <ul className="space-y-1">
           <li>
             <NavLink to="/notifications" className={itemClass}>
@@ -125,10 +127,17 @@ export function Sidebar() {
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <p className="truncate text-sm font-medium text-white">{user?.name ?? "Guest User"}</p>
-            <p className="truncate text-xs text-sidebar-foreground/60">{user?.role?.replace("_", " ") ?? "Viewer"}</p>
+            <p className="truncate text-sm font-medium text-white">
+              {user?.name ?? "Guest User"}
+            </p>
+            <p className="truncate text-xs text-sidebar-foreground/60">
+              {user?.role?.replace("_", " ") ?? "Viewer"}
+            </p>
           </div>
-          <button onClick={handleLogout} className="text-sidebar-foreground/50 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity">
+          <button
+            onClick={handleLogout}
+            className="text-sidebar-foreground/50 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity"
+          >
             <LogOut className="size-4" />
           </button>
         </div>

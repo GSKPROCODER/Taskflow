@@ -5,7 +5,16 @@ import { Sidebar } from "./Sidebar";
 import { TopBar } from "./TopNav";
 import { fadeUp } from "@/lib/motion";
 
-const MAIN_PAGES = ["/dashboard", "/projects", "/my-tasks", "/calendar", "/team", "/reports", "/jira-sync", "/slack-feed"];
+const MAIN_PAGES = [
+  "/dashboard",
+  "/projects",
+  "/my-tasks",
+  "/calendar",
+  "/team",
+  "/reports",
+  "/jira-sync",
+  "/slack-feed",
+];
 
 /**
  * Authenticated app frame: full-bleed sidebar + topbar over the routed content.
@@ -21,8 +30,10 @@ export function AppShell() {
       // Removed altKey requirement based on user request.
       // NOTE: This will trigger on any scroll, meaning vertical scrolling inside pages may cause unwanted page jumps.
       if (isScrolling.current) return;
-      
-      const currentIndex = MAIN_PAGES.findIndex(p => location.pathname.startsWith(p));
+
+      const currentIndex = MAIN_PAGES.findIndex((p) =>
+        location.pathname.startsWith(p),
+      );
       if (currentIndex === -1) return;
 
       // Detect both vertical (mouse wheel) and horizontal (trackpad swipe) scrolling
@@ -34,7 +45,8 @@ export function AppShell() {
         setTimeout(() => (isScrolling.current = false), 800); // debounce
       } else if (e.deltaY < -50 || e.deltaX < -50) {
         // Scroll up or left -> prev page
-        const prevIndex = (currentIndex - 1 + MAIN_PAGES.length) % MAIN_PAGES.length;
+        const prevIndex =
+          (currentIndex - 1 + MAIN_PAGES.length) % MAIN_PAGES.length;
         isScrolling.current = true;
         navigate(MAIN_PAGES[prevIndex]!);
         setTimeout(() => (isScrolling.current = false), 800); // debounce

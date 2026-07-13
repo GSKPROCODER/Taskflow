@@ -1,5 +1,12 @@
 import { motion } from "framer-motion";
-import { Users, Briefcase, Activity, ShieldCheck, MoreHorizontal, Search } from "lucide-react";
+import {
+  Users,
+  Briefcase,
+  Activity,
+  ShieldCheck,
+  MoreHorizontal,
+  Search,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -38,7 +45,7 @@ const MOCK_ROSTER = [
     dept: "Engineering",
     rank: "Dev-II",
     allocation: 85,
-    initials: "SC"
+    initials: "SC",
   },
   {
     id: 2,
@@ -47,7 +54,7 @@ const MOCK_ROSTER = [
     dept: "Product",
     rank: "Team Lead",
     allocation: 100,
-    initials: "DK"
+    initials: "DK",
   },
   {
     id: 3,
@@ -56,7 +63,7 @@ const MOCK_ROSTER = [
     dept: "Quality Assurance",
     rank: "QA-I",
     allocation: 30,
-    initials: "ER"
+    initials: "ER",
   },
   {
     id: 4,
@@ -65,7 +72,7 @@ const MOCK_ROSTER = [
     dept: "Engineering",
     rank: "Dev-III",
     allocation: 95,
-    initials: "MC"
+    initials: "MC",
   },
 ];
 
@@ -120,7 +127,9 @@ export function TeamPage() {
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit" className="w-full">Submit Provisioning Request</Button>
+              <Button type="submit" className="w-full">
+                Submit Provisioning Request
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -133,17 +142,17 @@ export function TeamPage() {
         animate="show"
         className="grid grid-cols-2 gap-4 lg:grid-cols-4"
       >
-        <StatCard 
-          label="Total Headcount" 
-          value="142" 
-          icon={Users} 
-          tone="bg-blue-100 text-blue-600" 
+        <StatCard
+          label="Total Headcount"
+          value="142"
+          icon={Users}
+          tone="bg-blue-100 text-blue-600"
         />
-        <StatCard 
-          label="Active Allocations" 
-          value="118" 
-          icon={Briefcase} 
-          tone="bg-purple-100 text-purple-600" 
+        <StatCard
+          label="Active Allocations"
+          value="118"
+          icon={Briefcase}
+          tone="bg-purple-100 text-purple-600"
         />
         <StatCard
           label="Bench Strength %"
@@ -163,8 +172,8 @@ export function TeamPage() {
       <div className="flex gap-4 items-center bg-card p-4 rounded-xl border border-border shadow-sm">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-          <Input 
-            placeholder="Search by name, email, or department..." 
+          <Input
+            placeholder="Search by name, email, or department..."
             className="pl-9 bg-background"
           />
         </div>
@@ -186,32 +195,47 @@ export function TeamPage() {
       {/* Roster Grid Component */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {MOCK_ROSTER.map((member) => (
-          <Card key={member.id} className="p-5 flex flex-col gap-4 border-border shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+          <Card
+            key={member.id}
+            className="p-5 flex flex-col gap-4 border-border shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group"
+          >
             <div className="absolute top-4 right-4">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                  >
                     <MoreHorizontal className="size-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem>View Profile</DropdownMenuItem>
                   <DropdownMenuItem>Change Role</DropdownMenuItem>
-                  <DropdownMenuItem className="text-destructive focus:bg-destructive/10">Revoke Access</DropdownMenuItem>
+                  <DropdownMenuItem className="text-destructive focus:bg-destructive/10">
+                    Revoke Access
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            
+
             <div className="flex items-center gap-4">
               <div className="relative">
                 <Avatar className="size-12 border-2 border-background shadow-sm">
-                  <AvatarFallback className="bg-primary/10 text-primary font-semibold">{member.initials}</AvatarFallback>
+                  <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                    {member.initials}
+                  </AvatarFallback>
                 </Avatar>
                 <span className="absolute bottom-0 right-0 size-3 rounded-full border-2 border-background bg-emerald-500"></span>
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="font-bold text-foreground truncate">{member.name}</span>
-                <span className="text-xs text-muted-foreground truncate">{member.email}</span>
+                <span className="font-bold text-foreground truncate">
+                  {member.name}
+                </span>
+                <span className="text-xs text-muted-foreground truncate">
+                  {member.email}
+                </span>
               </div>
             </div>
 
@@ -223,9 +247,17 @@ export function TeamPage() {
 
             <div className="mt-2 space-y-1.5">
               <div className="flex justify-between text-xs font-medium">
-                <span className="text-muted-foreground">Resource Utilization</span>
-                <span className={member.allocation >= 80 ? "text-primary" : "text-amber-500"}>
-                  {member.allocation >= 80 ? `${member.allocation}% Allocated` : `${100 - member.allocation}% Bench`}
+                <span className="text-muted-foreground">
+                  Resource Utilization
+                </span>
+                <span
+                  className={
+                    member.allocation >= 80 ? "text-primary" : "text-amber-500"
+                  }
+                >
+                  {member.allocation >= 80
+                    ? `${member.allocation}% Allocated`
+                    : `${100 - member.allocation}% Bench`}
                 </span>
               </div>
               <Progress value={member.allocation} className="h-2" />

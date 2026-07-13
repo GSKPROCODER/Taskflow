@@ -33,7 +33,7 @@ const MOCK_MESSAGES = [
     time: "1:15 PM",
     avatar: "DK",
     text: "Reviewing the PR for the new auth flow now, should be merged shortly.",
-  }
+  },
 ];
 
 export function SlackFeedPage() {
@@ -50,7 +50,8 @@ export function SlackFeedPage() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex size-2 rounded-full bg-emerald-500"></span>
             </span>
-            Connected Channel: <Hash className="size-3.5 inline" />project-updates
+            Connected Channel: <Hash className="size-3.5 inline" />
+            project-updates
           </p>
         </div>
         <Button className="bg-purple-600 hover:bg-purple-700 text-white shadow-md">
@@ -64,14 +65,28 @@ export function SlackFeedPage() {
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {MOCK_MESSAGES.map((msg) => (
             <div key={msg.id} className="flex gap-4 group">
-              <Avatar className={`size-10 shrink-0 ${msg.isBot ? 'bg-primary/20 text-primary' : 'bg-muted text-muted-foreground'}`}>
-                <AvatarFallback className={msg.isBot ? 'bg-primary/10 font-bold' : ''}>{msg.avatar}</AvatarFallback>
+              <Avatar
+                className={`size-10 shrink-0 ${msg.isBot ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground"}`}
+              >
+                <AvatarFallback
+                  className={msg.isBot ? "bg-primary/10 font-bold" : ""}
+                >
+                  {msg.avatar}
+                </AvatarFallback>
               </Avatar>
               <div className="flex flex-col gap-1 min-w-0">
                 <div className="flex items-baseline gap-2">
-                  <span className="font-bold text-foreground">{msg.sender}</span>
-                  {msg.isBot && <span className="text-[10px] uppercase font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded">Bot</span>}
-                  <span className="text-xs text-muted-foreground">{msg.time}</span>
+                  <span className="font-bold text-foreground">
+                    {msg.sender}
+                  </span>
+                  {msg.isBot && (
+                    <span className="text-[10px] uppercase font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+                      Bot
+                    </span>
+                  )}
+                  <span className="text-xs text-muted-foreground">
+                    {msg.time}
+                  </span>
                 </div>
                 <p className="text-sm text-foreground/90 leading-relaxed">
                   {msg.text}
@@ -84,11 +99,15 @@ export function SlackFeedPage() {
         {/* QUICK INPUT BAR */}
         <div className="border-t border-border bg-muted/20 p-4">
           <div className="relative flex items-center">
-            <Input 
+            <Input
               placeholder="Type a quick message to #project-updates..."
               className="pr-12 bg-background border-muted"
             />
-            <Button size="icon" variant="ghost" className="absolute right-1 text-primary hover:bg-primary/10 hover:text-primary">
+            <Button
+              size="icon"
+              variant="ghost"
+              className="absolute right-1 text-primary hover:bg-primary/10 hover:text-primary"
+            >
               <Send className="size-4" />
             </Button>
           </div>

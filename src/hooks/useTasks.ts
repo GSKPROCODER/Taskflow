@@ -71,7 +71,10 @@ export function useCreateTask(projectId: string) {
   return useMutation({
     mutationFn: async (task: Partial<Task>) => {
       try {
-        const { data } = await apiClient.post(`/projects/${projectId}/tasks`, task);
+        const { data } = await apiClient.post(
+          `/projects/${projectId}/tasks`,
+          task,
+        );
         return data;
       } catch {
         // Fallback to local mock data update
@@ -114,7 +117,13 @@ export function useUpdateTask() {
 export function useUpdateTaskStatus() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: Task["status"] }) => {
+    mutationFn: async ({
+      id,
+      status,
+    }: {
+      id: string;
+      status: Task["status"];
+    }) => {
       const { data } = await apiClient.patch(`/tasks/${id}/status`, { status });
       return data;
     },

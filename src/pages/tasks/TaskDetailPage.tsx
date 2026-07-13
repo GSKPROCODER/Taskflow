@@ -30,7 +30,12 @@ export function TaskDetailPage() {
   const { data: project } = useProject(task?.project_id ?? "");
   const [status, setStatus] = useState<TaskStatus | undefined>(task?.status);
 
-  if (isLoading) return <div className="p-8 text-center text-muted-foreground">Loading task...</div>;
+  if (isLoading)
+    return (
+      <div className="p-8 text-center text-muted-foreground">
+        Loading task...
+      </div>
+    );
   if (!task) return <NotFoundPage />;
 
   const assignee = userById(task.assignee_id);
@@ -108,7 +113,9 @@ export function TaskDetailPage() {
                 <span className="inline-flex items-center gap-2 text-muted-foreground">
                   <FolderKanban className="size-4" /> Project
                 </span>
-                <span className="font-medium text-foreground truncate max-w-[140px]">{project?.name}</span>
+                <span className="font-medium text-foreground truncate max-w-[140px]">
+                  {project?.name}
+                </span>
               </div>
 
               <div className="flex items-center justify-between text-sm">
@@ -129,15 +136,21 @@ export function TaskDetailPage() {
                 {assignee ? (
                   <span className="flex items-center gap-2">
                     <NameAvatar name={assignee.name} className="size-6" />
-                    <span className="font-medium text-foreground">{assignee.name}</span>
+                    <span className="font-medium text-foreground">
+                      {assignee.name}
+                    </span>
                   </span>
                 ) : (
-                  <span className="text-muted-foreground italic">Unassigned</span>
+                  <span className="text-muted-foreground italic">
+                    Unassigned
+                  </span>
                 )}
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Reporter</span>
-                <span className="font-medium text-foreground">{creator?.name}</span>
+                <span className="font-medium text-foreground">
+                  {creator?.name}
+                </span>
               </div>
             </div>
           </div>

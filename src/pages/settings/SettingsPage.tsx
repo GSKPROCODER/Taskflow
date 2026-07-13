@@ -64,9 +64,13 @@ export function SettingsPage() {
               Add a secondary method of verification used during login.
             </p>
           </div>
-          <Button 
+          <Button
             variant={is2FAEnabled ? "default" : "outline"}
-            className={is2FAEnabled ? "bg-emerald-500 hover:bg-emerald-600 text-white" : ""}
+            className={
+              is2FAEnabled
+                ? "bg-emerald-500 hover:bg-emerald-600 text-white"
+                : ""
+            }
             onClick={() => setIs2FAEnabled(!is2FAEnabled)}
           >
             {is2FAEnabled ? "Enabled ✓" : "Enable"}

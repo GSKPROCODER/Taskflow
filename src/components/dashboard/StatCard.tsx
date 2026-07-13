@@ -38,7 +38,9 @@ export function StatCard({
           </div>
           <div className="flex flex-col">
             <p className="text-sm font-medium text-muted-foreground">{label}</p>
-            <p className="text-3xl font-bold tracking-tight text-foreground mt-1">{value}</p>
+            <p className="text-3xl font-bold tracking-tight text-foreground mt-1">
+              {value}
+            </p>
           </div>
         </div>
       </Card>
