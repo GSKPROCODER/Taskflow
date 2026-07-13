@@ -1,20 +1,38 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/api/client";
-import { tasks as mockTasks, tasksForUser, tasksByProject, taskById as mockTaskById } from "@/lib/mock-data";
+import {
+  tasks as mockTasks,
+  tasksByProject,
+  taskById,
+  tasksForUser,
+} from "@/lib/mock-data";
 import type { Task } from "@/types";
 
+interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
 /**
- * Tasks data (PRD §8.3).
+ * Tasks data (PRD §8.3). Calls the TaskFlow API; falls back to demo data if
+ * the request fails (e.g. no backend running yet in local dev).
+ * projectId given → GET /projects/:id/tasks (Kanban board, capped at 200).
+ * no projectId → GET /tasks (dashboard-wide stats, paginated).
  */
-async function fetchTasks(projectId: string): Promise<Task[]> {
+async function fetchTasks(projectId?: string): Promise<Task[]> {
   try {
-    const { data } = await apiClient.get(`/projects/${projectId}/tasks`);
-    if (!data || data.length === 0) {
-      return [...tasksByProject(projectId)];
+    if (projectId) {
+      const res = await apiClient.get<Task[]>(`/projects/${projectId}/tasks`);
+      return res.data.length ? res.data : tasksByProject(projectId);
     }
-    return data;
+    const res = await apiClient.get<PaginatedResponse<Task>>("/tasks", {
+      params: { page: 1, limit: 500 },
+    });
+    return res.data.data.length ? res.data.data : mockTasks;
   } catch {
-    return [...tasksByProject(projectId)];
+    return projectId ? tasksByProject(projectId) : mockTasks;
   }
 }
 
@@ -26,35 +44,26 @@ export function useTasks(projectId?: string) {
   });
 }
 
-// Global tasks fetch (requires a different endpoint or querying all projects, 
-// but for MVP, we mostly need tasks by project or user).
-// We'll stub useMyTasks if a global endpoint doesn't exist yet, or adjust as needed.
-export function useMyTasks(userId: string) {
-  // If we need all tasks for a user, we should create a GET /tasks endpoint.
-  // For now, returning empty to be filled if needed, or query all projects' tasks.
-  return {
-    data: tasksForUser(userId),
-    isLoading: false,
-  } as const;
-}
-
-async function fetchTask(id: string): Promise<Task> {
+/** GET /tasks/:id — single task fetch, no longer over-fetches the full list. */
+async function fetchTask(id: string): Promise<Task | undefined> {
   try {
-    const { data } = await apiClient.get(`/tasks/${id}`);
-    return data;
+    const res = await apiClient.get<Task>(`/tasks/${id}`);
+    return res.data;
   } catch {
-    const task = mockTaskById(id);
-    if (!task) throw new Error("Task not found");
-    return task;
+    return taskById(id);
   }
 }
 
 export function useTask(id: string | undefined) {
-  return useQuery({
+  const q = useQuery({
     queryKey: ["task", id],
     queryFn: () => fetchTask(id!),
     enabled: !!id,
   });
+  return {
+    data: q.data ?? (id ? taskById(id) : undefined),
+    isLoading: q.isLoading,
+  } as const;
 }
 
 export function useCreateTask(projectId: string) {
@@ -128,4 +137,27 @@ export function useDeleteTask() {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
   });
+}
+
+/** GET /tasks/mine — server scopes this to the authenticated user's own tasks. */
+async function fetchMyTasks(): Promise<Task[]> {
+  try {
+    const res = await apiClient.get<PaginatedResponse<Task>>("/tasks/mine", {
+      params: { page: 1, limit: 100 },
+    });
+    return res.data.data;
+  } catch {
+    return [];
+  }
+}
+
+export function useMyTasks(userId: string) {
+  const q = useQuery({
+    queryKey: ["tasks", "mine", userId],
+    queryFn: fetchMyTasks,
+    enabled: !!userId,
+  });
+  const fallback = tasksForUser(userId);
+  const data = q.data?.length ? q.data : fallback;
+  return { data, isLoading: q.isLoading } as const;
 }

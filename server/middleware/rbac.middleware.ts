@@ -1,20 +1,34 @@
 import type { Context, Next } from "hono";
-import { ForbiddenError } from "../lib/errors";
+import { ForbiddenError, UnauthorizedError } from "../lib/errors";
 
 export type Role = "team_lead" | "developer" | "tester";
 
 /**
  * Role-based access control (PRD §6, §10).
- * Reads c.get("user").role and throws ForbiddenError if not in allowedRoles.
+ * Must run AFTER authMiddleware (which sets c.var.user).
  *
- * Usage: app.post("/projects", requireRole("team_lead"), createProject)
+ * Usage:
+ *   app.post("/projects", authMiddleware, requireRole("team_lead"), createProject)
+ *
+ * Throws:
+ *   UnauthorizedError (401) — no user on context (authMiddleware skipped)
+ *   ForbiddenError    (403) — user role not in allowedRoles
  */
 export function requireRole(...allowedRoles: Role[]) {
   return async (c: Context, next: Next) => {
     const user = c.get("user");
-    if (!user || !allowedRoles.includes(user.role as Role)) {
-      throw new ForbiddenError(`Requires one of roles: ${allowedRoles.join(", ")}`);
+
+    if (!user) {
+      // authMiddleware should always run first, but guard defensively.
+      throw new UnauthorizedError();
     }
+
+    if (!allowedRoles.includes(user.role as Role)) {
+      throw new ForbiddenError(
+        `Role '${user.role}' is not permitted. Required: ${allowedRoles.join(" | ")}`,
+      );
+    }
+
     await next();
   };
 }

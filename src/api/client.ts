@@ -10,8 +10,12 @@ export const apiClient = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
+// Attach the current Supabase session's JWT to every request — the API's
+// authMiddleware (server/middleware/auth.middleware.ts) requires it.
 apiClient.interceptors.request.use(async (config) => {
-  const { data: { session } } = await supabase.auth.getSession();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
   if (session?.access_token) {
     config.headers.Authorization = `Bearer ${session.access_token}`;
   }

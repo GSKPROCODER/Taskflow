@@ -3,16 +3,27 @@ import { apiClient } from "@/api/client";
 import { projects as mockProjects, projectById } from "@/lib/mock-data";
 import type { Project } from "@/types";
 
+interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
 /**
- * Projects data (PRD §8.2).
+ * Projects data (PRD §8.2). Calls the TaskFlow API; falls back to demo data
+ * if the request fails (e.g. no backend running yet in local dev).
+ * limit: 100 keeps this a flat list for now — no pager UI exists yet.
  */
 async function fetchProjects(): Promise<Project[]> {
   try {
-    const { data } = await apiClient.get<Project[]>("/projects");
-    if (!data || data.length === 0) {
+    const res = await apiClient.get<PaginatedResponse<Project>>("/projects", {
+      params: { page: 1, limit: 100 },
+    });
+    if (!res.data || res.data.data.length === 0) {
       return [...mockProjects];
     }
-    return data;
+    return res.data.data;
   } catch {
     return [...mockProjects];
   }
