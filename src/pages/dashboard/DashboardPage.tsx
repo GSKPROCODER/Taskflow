@@ -101,7 +101,7 @@ export function DashboardPage() {
         variants={staggerContainer}
         initial="hidden"
         animate="show"
-        className="grid grid-cols-2 gap-4 lg:grid-cols-5"
+        className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:grid-cols-5"
       >
         <StatCard
           label="Total Projects"

@@ -16,14 +16,14 @@ export function TaskBoard({ tasks }: { tasks: Task[] }) {
   const byStatus = (s: TaskStatus) => tasks.filter((t) => t.status === s);
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 md:grid md:grid-cols-2 xl:grid-cols-4 md:overflow-visible md:pb-0 md:snap-none">
       {TASK_STATUS_ORDER.map((status) => {
         const items = byStatus(status);
         return (
           <div
             key={status}
             className={cn(
-              "flex flex-col rounded-2xl border border-border p-3",
+              "flex flex-col rounded-2xl border border-border p-3 w-[85vw] shrink-0 snap-center md:w-auto",
               STATUS_COLUMN_TINT[status],
             )}
           >
