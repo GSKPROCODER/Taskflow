@@ -1,9 +1,10 @@
 import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Sidebar } from "./Sidebar";
 import { TopBar } from "./TopNav";
 import { fadeUp } from "@/lib/motion";
+import { useUIStore } from "@/store/ui.store";
 
 const MAIN_PAGES = [
   "/dashboard",
@@ -24,6 +25,7 @@ export function AppShell() {
   const location = useLocation();
   const navigate = useNavigate();
   const isScrolling = useRef(false);
+  const { sidebarOpen, setSidebarOpen } = useUIStore();
 
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
@@ -59,9 +61,35 @@ export function AppShell() {
 
   return (
     <div className="flex h-screen overflow-hidden bg-sidebar">
-      <div className="flex-shrink-0 w-64 border-r border-sidebar-accent bg-sidebar">
+      {/* Desktop Sidebar */}
+      <div className="hidden md:flex flex-shrink-0 w-64 border-r border-sidebar-accent bg-sidebar">
         <Sidebar />
       </div>
+
+      {/* Mobile Sidebar Overlay */}
+      <AnimatePresence>
+        {sidebarOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSidebarOpen(false)}
+              className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm md:hidden"
+            />
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed inset-y-0 left-0 z-50 w-3/4 max-w-sm border-r border-sidebar-accent bg-sidebar md:hidden"
+            >
+              <Sidebar />
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
       <div className="flex min-w-0 flex-1 flex-col">
         <TopBar />
         <main className="flex-1 overflow-y-auto bg-background">

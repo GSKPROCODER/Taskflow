@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
+import { useUIStore } from "@/store/ui.store";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const navItemBase =
@@ -31,6 +32,7 @@ function itemClass({ isActive }: { isActive: boolean }) {
 
 export function Sidebar() {
   const { user, signOut } = useAuth();
+  const { setSidebarOpen } = useUIStore();
 
   const handleLogout = async () => {
     await signOut();
@@ -51,49 +53,81 @@ export function Sidebar() {
       <nav className="flex-1 overflow-y-auto px-4 py-2">
         <ul className="space-y-1">
           <li>
-            <NavLink to="/dashboard" className={itemClass}>
+            <NavLink
+              to="/dashboard"
+              onClick={() => setSidebarOpen(false)}
+              className={itemClass}
+            >
               <Home className="size-4" />
               Dashboard
             </NavLink>
           </li>
           <li>
-            <NavLink to="/projects" className={itemClass}>
+            <NavLink
+              to="/projects"
+              onClick={() => setSidebarOpen(false)}
+              className={itemClass}
+            >
               <FolderKanban className="size-4" />
               Projects
             </NavLink>
           </li>
           <li>
-            <NavLink to="/my-tasks" className={itemClass}>
+            <NavLink
+              to="/my-tasks"
+              onClick={() => setSidebarOpen(false)}
+              className={itemClass}
+            >
               <ListTodo className="size-4" />
               Tasks
             </NavLink>
           </li>
           <li>
-            <NavLink to="/calendar" className={itemClass}>
+            <NavLink
+              to="/calendar"
+              onClick={() => setSidebarOpen(false)}
+              className={itemClass}
+            >
               <CalendarDays className="size-4" />
               Calendar
             </NavLink>
           </li>
           <li>
-            <NavLink to="/team" className={itemClass}>
+            <NavLink
+              to="/team"
+              onClick={() => setSidebarOpen(false)}
+              className={itemClass}
+            >
               <Users className="size-4" />
               Team
             </NavLink>
           </li>
           <li>
-            <NavLink to="/reports" className={itemClass}>
+            <NavLink
+              to="/reports"
+              onClick={() => setSidebarOpen(false)}
+              className={itemClass}
+            >
               <BarChart2 className="size-4" />
               Reports
             </NavLink>
           </li>
           <li>
-            <NavLink to="/jira-sync" className={itemClass}>
+            <NavLink
+              to="/jira-sync"
+              onClick={() => setSidebarOpen(false)}
+              className={itemClass}
+            >
               <KanbanSquare className="size-4" />
               Jira Sync
             </NavLink>
           </li>
           <li>
-            <NavLink to="/slack-feed" className={itemClass}>
+            <NavLink
+              to="/slack-feed"
+              onClick={() => setSidebarOpen(false)}
+              className={itemClass}
+            >
               <MessageSquare className="size-4" />
               Slack Feed
             </NavLink>
@@ -104,13 +138,21 @@ export function Sidebar() {
 
         <ul className="space-y-1">
           <li>
-            <NavLink to="/notifications" className={itemClass}>
+            <NavLink
+              to="/notifications"
+              onClick={() => setSidebarOpen(false)}
+              className={itemClass}
+            >
               <Bell className="size-4" />
               Notifications
             </NavLink>
           </li>
           <li>
-            <NavLink to="/settings" className={itemClass}>
+            <NavLink
+              to="/settings"
+              onClick={() => setSidebarOpen(false)}
+              className={itemClass}
+            >
               <Settings className="size-4" />
               Settings
             </NavLink>
