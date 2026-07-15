@@ -6,7 +6,6 @@ import { PriorityBadge } from "./PriorityBadge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { AvatarStack } from "@/components/ui/avatar-stack";
 import { formatDate } from "@/lib/format";
-import { userById } from "@/lib/mock-data";
 import type { Task } from "@/types";
 
 const COLUMNS = [
@@ -49,9 +48,8 @@ export function TaskList({ tasks }: { tasks: Task[] }) {
         </thead>
         <tbody>
           {tasks.map((task) => {
-            const assignee = userById(task.assignee_id);
-            const people = assignee
-              ? [assignee.name, "Marcus Lee", "Sofia Rossi"]
+            const people = task.assignee_id
+              ? [task.assignee_id.slice(0, 8)]
               : [];
             return (
               <tr

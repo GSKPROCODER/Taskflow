@@ -5,17 +5,15 @@ import { PriorityBadge } from "./PriorityBadge";
 import { AvatarStack } from "@/components/ui/avatar-stack";
 import { Progress } from "@/components/ui/progress";
 import { staggerItem, hoverLift } from "@/lib/motion";
-import { STATUS_BAR } from "@/lib/ui";
+import { STATUS_BAR, taskProgress } from "@/lib/ui";
 import { formatDate } from "@/lib/format";
-import { taskProgress, userById } from "@/lib/mock-data";
 import type { Task } from "@/types";
 
 /** Kanban card: priority badge, title, progress, due date + assignee avatars. */
 export function TaskCard({ task }: { task: Task }) {
   const navigate = useNavigate();
-  const assignee = userById(task.assignee_id);
   const progress = taskProgress(task.status);
-  const people = assignee ? [assignee.name, "Priya Shah", "Marcus Lee"] : [];
+  const people = task.assignee_id ? [task.assignee_id.slice(0, 8)] : [];
 
   return (
     <motion.button

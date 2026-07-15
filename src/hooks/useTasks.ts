@@ -1,11 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/api/client";
-import {
-  tasks as mockTasks,
-  tasksByProject,
-  taskById,
-  tasksForUser,
-} from "@/lib/mock-data";
 import type { Task } from "@/types";
 
 interface PaginatedResponse<T> {
@@ -16,24 +10,20 @@ interface PaginatedResponse<T> {
 }
 
 /**
- * Tasks data (PRD §8.3). Calls the TaskFlow API; falls back to demo data if
- * the request fails (e.g. no backend running yet in local dev).
+ * Tasks data (PRD §8.3). Calls the TaskFlow API.
+ * Errors propagate to TanStack Query's error state — no silent mock fallbacks.
  * projectId given → GET /projects/:id/tasks (Kanban board, capped at 200).
  * no projectId → GET /tasks (dashboard-wide stats, paginated).
  */
 async function fetchTasks(projectId?: string): Promise<Task[]> {
-  try {
-    if (projectId) {
-      const res = await apiClient.get<Task[]>(`/projects/${projectId}/tasks`);
-      return res.data.length ? res.data : tasksByProject(projectId);
-    }
-    const res = await apiClient.get<PaginatedResponse<Task>>("/tasks", {
-      params: { page: 1, limit: 500 },
-    });
-    return res.data.data.length ? res.data.data : mockTasks;
-  } catch {
-    return projectId ? tasksByProject(projectId) : mockTasks;
+  if (projectId) {
+    const res = await apiClient.get<Task[]>(`/projects/${projectId}/tasks`);
+    return res.data;
   }
+  const res = await apiClient.get<PaginatedResponse<Task>>("/tasks", {
+    params: { page: 1, limit: 500 },
+  });
+  return res.data.data;
 }
 
 export function useTasks(projectId?: string) {
@@ -44,14 +34,10 @@ export function useTasks(projectId?: string) {
   });
 }
 
-/** GET /tasks/:id — single task fetch, no longer over-fetches the full list. */
-async function fetchTask(id: string): Promise<Task | undefined> {
-  try {
-    const res = await apiClient.get<Task>(`/tasks/${id}`);
-    return res.data;
-  } catch {
-    return taskById(id);
-  }
+/** GET /tasks/:id — single task fetch. */
+async function fetchTask(id: string): Promise<Task> {
+  const res = await apiClient.get<Task>(`/tasks/${id}`);
+  return res.data;
 }
 
 export function useTask(id: string | undefined) {
@@ -61,7 +47,7 @@ export function useTask(id: string | undefined) {
     enabled: !!id,
   });
   return {
-    data: q.data ?? (id ? taskById(id) : undefined),
+    data: q.data,
     isLoading: q.isLoading,
   } as const;
 }
@@ -70,30 +56,11 @@ export function useCreateTask(projectId: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (task: Partial<Task>) => {
-      try {
-        const { data } = await apiClient.post(
-          `/projects/${projectId}/tasks`,
-          task,
-        );
-        return data;
-      } catch {
-        // Fallback to local mock data update
-        const newTask: Task = {
-          id: `t-${Date.now()}`,
-          title: task.title || "New Task",
-          description: task.description || "",
-          status: task.status || "todo",
-          priority: task.priority || "medium",
-          project_id: projectId,
-          assignee_id: task.assignee_id || "u-1", // mock user id
-          created_by: "u-1", // mock user id
-          due_date: task.due_date ?? null,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        };
-        mockTasks.push(newTask);
-        return newTask;
-      }
+      const { data } = await apiClient.post(
+        `/projects/${projectId}/tasks`,
+        task,
+      );
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks", projectId] });
@@ -150,14 +117,10 @@ export function useDeleteTask() {
 
 /** GET /tasks/mine — server scopes this to the authenticated user's own tasks. */
 async function fetchMyTasks(): Promise<Task[]> {
-  try {
-    const res = await apiClient.get<PaginatedResponse<Task>>("/tasks/mine", {
-      params: { page: 1, limit: 100 },
-    });
-    return res.data.data;
-  } catch {
-    return [];
-  }
+  const res = await apiClient.get<PaginatedResponse<Task>>("/tasks/mine", {
+    params: { page: 1, limit: 100 },
+  });
+  return res.data.data;
 }
 
 export function useMyTasks(userId: string) {
@@ -166,7 +129,5 @@ export function useMyTasks(userId: string) {
     queryFn: fetchMyTasks,
     enabled: !!userId,
   });
-  const fallback = tasksForUser(userId);
-  const data = q.data?.length ? q.data : fallback;
-  return { data, isLoading: q.isLoading } as const;
+  return { data: q.data ?? [], isLoading: q.isLoading } as const;
 }

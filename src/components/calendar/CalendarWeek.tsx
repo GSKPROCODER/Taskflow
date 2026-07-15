@@ -1,7 +1,15 @@
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { staggerContainer, staggerItem } from "@/lib/motion";
-import { calendarEvents, type CalendarEvent } from "@/lib/mock-data";
+export interface CalendarEvent {
+  id: string;
+  title: string;
+  day: number;
+  startHour: number;
+  tone: "blue" | "violet" | "amber" | "emerald";
+}
+
+const calendarEvents: CalendarEvent[] = [];
 
 const DAYS = [
   { label: "SUN", date: 21 },

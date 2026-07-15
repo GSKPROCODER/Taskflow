@@ -288,3 +288,49 @@ Open an issue or ask the owner. Do **not** silently refactor the architecture,
 replace the API protocol or transport, change the hosting target, restructure
 folders, add heavy dependencies, or pull post-MVP features forward. When in
 doubt, follow this document.
+
+---
+
+## 14. Production-integrity rules (do not violate)
+
+These rules exist because past violations shipped to `main` and broke the app
+for real users. Every contributor — human or AI — must follow them. Violations
+will be reverted on sight.
+
+### 14.1 Routing
+
+1. **The root route (`/`) must always render the public landing/marketing page.**
+   Never replace it with `<Navigate to="/login" />` or any other redirect.
+   Unauthenticated visitors must see a marketing page, not a login wall.
+2. **Never delete a public page** (`LandingPage`, `NotFoundPage`, auth pages)
+   without replacing it in the same commit. If a page is imported by the router,
+   removing its file breaks the entire app.
+3. **Do not add catch-all redirects** (e.g. `path: "*" → /login`). The 404 page
+   exists for a reason.
+
+### 14.2 Authentication & session
+
+4. **The auth store must hydrate from Supabase on load.** It must call
+   `supabase.auth.getSession()` at startup and subscribe to
+   `supabase.auth.onAuthStateChange()`. Never short-circuit hydration with
+   `setUser(null)` — this breaks OAuth callback flows and session persistence.
+5. **Never use mock/fake users in production code paths.** Login and signup
+   handlers must call real Supabase auth functions (`signInWithPassword`,
+   `signUpWithPassword`). If you need mocks for testing, isolate them behind
+   `import.meta.env.MODE === "test"` or in `*.test.ts` files.
+6. **OAuth redirect URLs must point to real app routes** (e.g. `/dashboard`),
+   not to external URLs or placeholder paths.
+
+### 14.3 General
+
+7. **Run `bun run typecheck` before pushing.** If it fails, do not push.
+8. **Do not commit placeholder/fallback Supabase URLs or keys** in the client
+   (`"https://placeholder.supabase.co"`). The client must read from `VITE_`
+   env vars and fail visibly if they are missing — silent fallbacks hide
+   configuration errors.
+9. **Test the full auth flow locally** (sign up → verify → sign in → refresh →
+   sign out) before marking an auth-related PR as ready. Partial testing of
+   auth is the #1 source of regressions.
+10. **Do not remove or weaken `ProtectedRoute` guards.** Every route inside the
+    `AppShell` must remain behind `ProtectedRoute`. Moving a protected route to
+    the public router without explicit owner approval is forbidden.

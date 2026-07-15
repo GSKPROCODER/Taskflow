@@ -2,68 +2,50 @@ import { supabaseAdmin } from "../db/client";
 import { AppError } from "../lib/errors";
 
 export async function getMetrics() {
-  // For MVP, we get counts of all projects and tasks, simulating an org-level dashboard.
+  // Use Promise.all to fetch all dashboard metric counts concurrently
+  // instead of creating a massive waterfall latency.
 
-  const { count: totalProjects, error: err1 } = await supabaseAdmin
-    .from("projects")
-    .select("*", { count: "exact", head: true });
+  const queries = [
+    supabaseAdmin.from("projects").select("*", { count: "exact", head: true }),
+    supabaseAdmin.from("tasks").select("*", { count: "exact", head: true }),
+    supabaseAdmin
+      .from("tasks")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "in_progress"),
+    supabaseAdmin
+      .from("tasks")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "testing"),
+    supabaseAdmin
+      .from("tasks")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "done"),
+    supabaseAdmin
+      .from("tasks")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "todo"),
+    supabaseAdmin
+      .from("tasks")
+      .select("*", { count: "exact", head: true })
+      .eq("priority", "high"),
+    supabaseAdmin
+      .from("tasks")
+      .select("*", { count: "exact", head: true })
+      .eq("priority", "medium"),
+    supabaseAdmin
+      .from("tasks")
+      .select("*", { count: "exact", head: true })
+      .eq("priority", "low"),
+    supabaseAdmin
+      .from("tasks")
+      .select("*", { count: "exact", head: true })
+      .eq("priority", "critical"),
+  ];
 
-  const { count: totalTasks, error: err2 } = await supabaseAdmin
-    .from("tasks")
-    .select("*", { count: "exact", head: true });
+  const results = await Promise.all(queries);
 
-  const { count: inProgressTasks, error: err3 } = await supabaseAdmin
-    .from("tasks")
-    .select("*", { count: "exact", head: true })
-    .eq("status", "in_progress");
-
-  const { count: testingTasks, error: err4 } = await supabaseAdmin
-    .from("tasks")
-    .select("*", { count: "exact", head: true })
-    .eq("status", "testing");
-
-  const { count: doneTasks, error: err5 } = await supabaseAdmin
-    .from("tasks")
-    .select("*", { count: "exact", head: true })
-    .eq("status", "done");
-
-  const { count: todoTasks, error: err6 } = await supabaseAdmin
-    .from("tasks")
-    .select("*", { count: "exact", head: true })
-    .eq("status", "todo");
-
-  const { count: highPriority, error: err7 } = await supabaseAdmin
-    .from("tasks")
-    .select("*", { count: "exact", head: true })
-    .eq("priority", "high");
-
-  const { count: mediumPriority, error: err8 } = await supabaseAdmin
-    .from("tasks")
-    .select("*", { count: "exact", head: true })
-    .eq("priority", "medium");
-
-  const { count: lowPriority, error: err9 } = await supabaseAdmin
-    .from("tasks")
-    .select("*", { count: "exact", head: true })
-    .eq("priority", "low");
-
-  const { count: criticalPriority, error: err10 } = await supabaseAdmin
-    .from("tasks")
-    .select("*", { count: "exact", head: true })
-    .eq("priority", "critical");
-
-  if (
-    err1 ||
-    err2 ||
-    err3 ||
-    err4 ||
-    err5 ||
-    err6 ||
-    err7 ||
-    err8 ||
-    err9 ||
-    err10
-  ) {
+  // Check if any query failed
+  if (results.some((res) => res.error)) {
     throw new AppError(
       "Failed to fetch dashboard metrics",
       "INTERNAL_ERROR",
@@ -72,17 +54,17 @@ export async function getMetrics() {
   }
 
   return {
-    totalProjects: totalProjects ?? 0,
-    totalTasks: totalTasks ?? 0,
-    todo: todoTasks ?? 0,
-    inProgress: inProgressTasks ?? 0,
-    testing: testingTasks ?? 0,
-    done: doneTasks ?? 0,
+    totalProjects: results[0]?.count ?? 0,
+    totalTasks: results[1]?.count ?? 0,
+    inProgress: results[2]?.count ?? 0,
+    testing: results[3]?.count ?? 0,
+    done: results[4]?.count ?? 0,
+    todo: results[5]?.count ?? 0,
     priority: {
-      critical: criticalPriority ?? 0,
-      high: highPriority ?? 0,
-      medium: mediumPriority ?? 0,
-      low: lowPriority ?? 0,
+      high: results[6]?.count ?? 0,
+      medium: results[7]?.count ?? 0,
+      low: results[8]?.count ?? 0,
+      critical: results[9]?.count ?? 0,
     },
   };
 }
