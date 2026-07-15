@@ -13,7 +13,7 @@ import {
   signInWithGoogle,
   signInWithGithub,
 } from "@/lib/auth";
-import { useAuthStore } from "@/store/auth.store";
+
 
 const schema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -23,20 +23,12 @@ type FormValues = z.infer<typeof schema>;
 
 export function LoginPage() {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuthStore((s) => ({
-    isAuthenticated: s.status === "authed",
-  }));
   const [serverError, setServerError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({ resolver: zodResolver(schema) });
-
-  // If already authenticated, redirect to dashboard.
-  if (isAuthenticated) {
-    navigate("/dashboard", { replace: true });
-  }
 
   const onSubmit = async (values: FormValues) => {
     setServerError(null);
