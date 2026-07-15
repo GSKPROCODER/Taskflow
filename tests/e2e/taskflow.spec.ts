@@ -5,11 +5,91 @@ test.describe("TaskFlow Critical User Journeys", () => {
   const testEmail = "test@example.com";
   const testPassword = "password123";
 
+  test.beforeEach(async ({ page }) => {
+    // Mock Supabase Auth (signInWithPassword)
+    await page.route("**/auth/v1/token?grant_type=password", async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          access_token: "fake-jwt",
+          token_type: "bearer",
+          expires_in: 3600,
+          refresh_token: "fake-refresh",
+          user: {
+            id: "fake-user-id",
+            email: testEmail,
+            user_metadata: { role: "team_lead", name: "E2E User" },
+          },
+        }),
+      });
+    });
+
+    // Mock Dashboard and My Tasks (GET /api/v1/tasks* and /api/v1/dashboard*)
+    await page.route("**/api/v1/tasks*", async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ data: [], total: 0 }),
+      });
+    });
+
+    await page.route("**/api/v1/dashboard*", async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ data: { metrics: { total_tasks: 0, completed_tasks: 0, active_projects: 0 }, activity: [], my_tasks: [] }, total: 0 }),
+      });
+    });
+
+
+    // Mock Projects API (GET /api/v1/projects and POST /api/v1/projects)
+    await page.route("**/api/v1/projects*", async (route) => {
+      if (route.request().method() === "POST") {
+        await route.fulfill({
+          status: 201,
+          contentType: "application/json",
+          body: JSON.stringify({
+            data: {
+              id: "proj-1",
+              name: "E2E Automated Project",
+              description: "Created by Playwright",
+              status: "active",
+              created_by: "fake-user-id",
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            },
+          }),
+        });
+      } else {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({
+            data: [{
+              id: "proj-1",
+              name: "E2E Automated Project",
+              description: "Created by Playwright",
+              status: "active",
+              created_by: "fake-user-id",
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            }],
+            total: 1,
+          }),
+        });
+      }
+    });
+  });
+
   test("Authentication & Dashboard Routing", async ({ page }) => {
-    // Navigate to root which should redirect to login
+    // Navigate to root which should show the landing page
     await page.goto("/");
-    await expect(page).toHaveURL(/.*\/login/);
     await expect(page).toHaveTitle(/TaskFlow/);
+
+    // Then navigate to login
+    await page.goto("/login");
+    await expect(page).toHaveURL(/.*\/login/);
 
     // Fill credentials (assuming test@example.com is seeded or already registered)
     await page.fill('input[type="email"]', testEmail);

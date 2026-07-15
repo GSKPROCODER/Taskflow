@@ -23,9 +23,7 @@ type FormValues = z.infer<typeof schema>;
 
 export function LoginPage() {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuthStore((s) => ({
-    isAuthenticated: s.status === "authed",
-  }));
+  const isAuthenticated = useAuthStore((s) => s.status === "authed");
   const [serverError, setServerError] = useState<string | null>(null);
   const {
     register,

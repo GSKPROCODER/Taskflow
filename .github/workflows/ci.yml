@@ -55,3 +55,6 @@ jobs:
 
       - name: Run E2E tests
         run: bun run test:e2e
+        env:
+          VITE_SUPABASE_URL: "https://placeholder.supabase.co"
+          VITE_SUPABASE_ANON_KEY: "placeholder"
