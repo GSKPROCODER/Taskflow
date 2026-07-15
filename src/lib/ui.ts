@@ -99,3 +99,17 @@ export function initials(name: string): string {
     .join("")
     .toUpperCase();
 }
+
+/** Deterministic task progress based on status */
+export function taskProgress(status: TaskStatus): number {
+  switch (status) {
+    case "todo":
+      return 0;
+    case "in_progress":
+      return 50;
+    case "testing":
+      return 75;
+    case "done":
+      return 100;
+  }
+}

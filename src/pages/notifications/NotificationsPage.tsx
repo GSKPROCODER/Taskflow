@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 import { avatarColor, initials } from "@/lib/ui";
 import { relativeTime } from "@/lib/format";
 import { useNotifications } from "@/hooks/useNotifications";
-import { MOCK_NOW } from "@/lib/mock-data";
 
 export function NotificationsPage() {
   const { data: initialNotifications } = useNotifications();
@@ -88,7 +87,7 @@ export function NotificationsPage() {
                     <span className="font-medium">{n.target}</span>
                   </p>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    {relativeTime(n.created_at, MOCK_NOW)}
+                    {relativeTime(n.created_at, new Date())}
                   </p>
                   {n.kind === "invite" && (
                     <div className="mt-3 flex gap-2">

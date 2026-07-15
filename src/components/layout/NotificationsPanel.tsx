@@ -7,11 +7,7 @@ import { cn } from "@/lib/utils";
 import { avatarColor, initials } from "@/lib/ui";
 import { relativeTime } from "@/lib/format";
 import { Button } from "@/components/ui/button";
-import {
-  notifications as initialNotifications,
-  MOCK_NOW,
-  type AppNotification,
-} from "@/lib/mock-data";
+import { useNotifications, type Notification } from "@/hooks/useNotifications";
 
 const TABS = ["View All", "Files", "Jobs", "Invites"] as const;
 
@@ -19,7 +15,7 @@ function NotificationRow({
   n,
   onAction,
 }: {
-  n: AppNotification;
+  n: Notification;
   onAction: (id: string, action: "Approve" | "Cancel") => void;
 }) {
   return (
@@ -45,7 +41,7 @@ function NotificationRow({
           <span className="font-medium">{n.target}</span>
         </p>
         <p className="mt-1 text-xs text-muted-foreground">
-          {relativeTime(n.created_at, MOCK_NOW)}
+          {relativeTime(n.created_at, new Date())}
         </p>
         {n.kind === "invite" && (
           <div className="mt-2 flex gap-2">
@@ -71,7 +67,8 @@ function NotificationRow({
 
 export function NotificationsPanel() {
   const [tab, setTab] = useState<(typeof TABS)[number]>("View All");
-  const [notifications, setNotifications] = useState(initialNotifications);
+  const { data: initialNotifications } = useNotifications();
+  const [notifications, setNotifications] = useState<Notification[]>(initialNotifications as Notification[]);
 
   const unreadCount = notifications.filter((n) => n.unread).length;
 

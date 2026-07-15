@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
 import { Hexagon, CheckCircle2, Star, Quote } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { fadeUp, staggerContainer, staggerItem } from "@/lib/motion";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { useAuthStore } from "@/store/auth.store";
 
 const FEATURES = [
   "Role-based access control for Leads, Developers, and Testers.",
@@ -23,6 +24,13 @@ export function AuthLayout({
   children: React.ReactNode;
   footer: React.ReactNode;
 }) {
+  const isAuthenticated = useAuthStore((s) => s.status === "authed");
+
+  // If already signed in, skip auth screens and go to the app.
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
   return (
     <div className="grid min-h-screen lg:grid-cols-2 bg-background text-foreground">
       {/* Brand panel (Left) */}

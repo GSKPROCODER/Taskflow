@@ -19,7 +19,7 @@ import { formatDateLong } from "@/lib/format";
 import { useTask } from "@/hooks/useTasks";
 import { useComments } from "@/hooks/useComments";
 import { useProject } from "@/hooks/useProjects";
-import { userById } from "@/lib/mock-data";
+
 import { NotFoundPage } from "@/pages/NotFoundPage";
 import type { TaskStatus } from "@/types";
 
@@ -38,9 +38,15 @@ export function TaskDetailPage() {
     );
   if (!task) return <NotFoundPage />;
 
-  const assignee = userById(task.assignee_id);
-  const creator = userById(task.created_by);
   const current = status ?? task.status;
+  // Assignee/creator names require a /users/:id endpoint (not yet built).
+  // Show truncated IDs as a graceful fallback.
+  const assigneeName = task.assignee_id
+    ? task.assignee_id.slice(0, 8)
+    : null;
+  const creatorName = task.created_by
+    ? task.created_by.slice(0, 8)
+    : "Unknown";
 
   return (
     <div className="space-y-6">
@@ -133,11 +139,11 @@ export function TaskDetailPage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Assignee</span>
-                {assignee ? (
+                {assigneeName ? (
                   <span className="flex items-center gap-2">
-                    <NameAvatar name={assignee.name} className="size-6" />
+                    <NameAvatar name={assigneeName} className="size-6" />
                     <span className="font-medium text-foreground">
-                      {assignee.name}
+                      {assigneeName}
                     </span>
                   </span>
                 ) : (
@@ -149,7 +155,7 @@ export function TaskDetailPage() {
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Reporter</span>
                 <span className="font-medium text-foreground">
-                  {creator?.name}
+                  {creatorName}
                 </span>
               </div>
             </div>

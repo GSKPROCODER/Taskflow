@@ -27,7 +27,6 @@ import { avatarColor, initials } from "@/lib/ui";
 import { useAuth } from "@/hooks/useAuth";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useUIStore } from "@/store/ui.store";
-import { projectById, taskById } from "@/lib/mock-data";
 
 function useCrumbs(): Crumb[] {
   const { pathname } = useLocation();
@@ -41,19 +40,17 @@ function useCrumbs(): Crumb[] {
       return [{ label: "Dashboard" }];
     case "projects": {
       if (params.id) {
-        const p = projectById(params.id);
         return [
           { label: "Projects", to: "/projects" },
-          { label: p?.name ?? "Project" },
+          { label: `Project ${params.id.slice(0, 4).toUpperCase()}` },
         ];
       }
       return [{ label: "Projects" }];
     }
     case "tasks": {
-      const t = params.id ? taskById(params.id) : undefined;
       return [
         { label: "Tasks", to: "/my-tasks" },
-        { label: t?.title ?? "Task" },
+        { label: params.id ? `Task ${params.id.slice(0, 4).toUpperCase()}` : "Task" },
       ];
     }
     case "my-tasks":

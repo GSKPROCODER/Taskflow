@@ -12,8 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { users as mockTeam, tasks as mockTasks } from "@/lib/mock-data";
-import type { Project, Task } from "@/types";
+import type { Project } from "@/types";
 
 export function ProjectList({ projects }: { projects: Project[] }) {
   return (
@@ -37,9 +36,7 @@ export function ProjectList({ projects }: { projects: Project[] }) {
             className="divide-y divide-border/60"
           >
             {projects.map((project) => {
-              const taskCount = mockTasks.filter(
-                (t: Task) => t.project_id === project.id,
-              ).length;
+              const taskCount = "-"; // Requires a /projects/:id/stats backend endpoint
               const isArchived = project.status === "archived";
               return (
                 <motion.tr
@@ -60,7 +57,7 @@ export function ProjectList({ projects }: { projects: Project[] }) {
                   </td>
                   <td className="px-6 py-4">
                     <AvatarStack
-                      names={mockTeam.slice(0, 3).map((u) => u.name)}
+                      names={[project.created_by.slice(0, 8)]}
                       max={3}
                     />
                   </td>

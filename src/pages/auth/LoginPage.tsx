@@ -8,7 +8,11 @@ import { AuthLayout } from "./AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signInWithGoogle, signInWithGithub } from "@/lib/auth";
+import {
+  signInWithPassword,
+  signInWithGoogle,
+  signInWithGithub,
+} from "@/lib/auth";
 import { useAuthStore } from "@/store/auth.store";
 
 const schema = z.object({
@@ -19,6 +23,9 @@ type FormValues = z.infer<typeof schema>;
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuthStore((s) => ({
+    isAuthenticated: s.status === "authed",
+  }));
   const [serverError, setServerError] = useState<string | null>(null);
   const {
     register,
@@ -26,18 +33,17 @@ export function LoginPage() {
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
+  // If already authenticated, redirect to dashboard.
+  if (isAuthenticated) {
+    navigate("/dashboard", { replace: true });
+  }
+
   const onSubmit = async (values: FormValues) => {
     setServerError(null);
     try {
-      // Mock login for UI preview since Vercel has no Supabase keys
-      useAuthStore.getState().setUser({
-        id: "mock-id-123",
-        email: values.email,
-        name: values.email.split("@")[0] || "User",
-        role: "team_lead",
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      });
+      await signInWithPassword(values.email, values.password);
+      // onAuthStateChange in auth.store.ts will set the user.
+      // Navigate after a short tick to allow the store to update.
       navigate("/dashboard");
     } catch (err) {
       setServerError(err instanceof Error ? err.message : "Sign in failed");
