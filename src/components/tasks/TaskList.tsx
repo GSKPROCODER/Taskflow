@@ -48,7 +48,9 @@ export function TaskList({ tasks }: { tasks: Task[] }) {
         </thead>
         <tbody>
           {tasks.map((task) => {
-            const people = task.assignee_id ? [task.assignee_id.slice(0, 8)] : [];
+            const people = task.assignee_id
+              ? [task.assignee_id.slice(0, 8)]
+              : [];
             return (
               <tr
                 key={task.id}

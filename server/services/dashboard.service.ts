@@ -8,14 +8,38 @@ export async function getMetrics() {
   const queries = [
     supabaseAdmin.from("projects").select("*", { count: "exact", head: true }),
     supabaseAdmin.from("tasks").select("*", { count: "exact", head: true }),
-    supabaseAdmin.from("tasks").select("*", { count: "exact", head: true }).eq("status", "in_progress"),
-    supabaseAdmin.from("tasks").select("*", { count: "exact", head: true }).eq("status", "testing"),
-    supabaseAdmin.from("tasks").select("*", { count: "exact", head: true }).eq("status", "done"),
-    supabaseAdmin.from("tasks").select("*", { count: "exact", head: true }).eq("status", "todo"),
-    supabaseAdmin.from("tasks").select("*", { count: "exact", head: true }).eq("priority", "high"),
-    supabaseAdmin.from("tasks").select("*", { count: "exact", head: true }).eq("priority", "medium"),
-    supabaseAdmin.from("tasks").select("*", { count: "exact", head: true }).eq("priority", "low"),
-    supabaseAdmin.from("tasks").select("*", { count: "exact", head: true }).eq("priority", "critical"),
+    supabaseAdmin
+      .from("tasks")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "in_progress"),
+    supabaseAdmin
+      .from("tasks")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "testing"),
+    supabaseAdmin
+      .from("tasks")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "done"),
+    supabaseAdmin
+      .from("tasks")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "todo"),
+    supabaseAdmin
+      .from("tasks")
+      .select("*", { count: "exact", head: true })
+      .eq("priority", "high"),
+    supabaseAdmin
+      .from("tasks")
+      .select("*", { count: "exact", head: true })
+      .eq("priority", "medium"),
+    supabaseAdmin
+      .from("tasks")
+      .select("*", { count: "exact", head: true })
+      .eq("priority", "low"),
+    supabaseAdmin
+      .from("tasks")
+      .select("*", { count: "exact", head: true })
+      .eq("priority", "critical"),
   ];
 
   const results = await Promise.all(queries);

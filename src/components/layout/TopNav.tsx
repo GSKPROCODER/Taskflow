@@ -50,7 +50,11 @@ function useCrumbs(): Crumb[] {
     case "tasks": {
       return [
         { label: "Tasks", to: "/my-tasks" },
-        { label: params.id ? `Task ${params.id.slice(0, 4).toUpperCase()}` : "Task" },
+        {
+          label: params.id
+            ? `Task ${params.id.slice(0, 4).toUpperCase()}`
+            : "Task",
+        },
       ];
     }
     case "my-tasks":

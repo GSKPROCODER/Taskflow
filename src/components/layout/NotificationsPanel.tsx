@@ -68,7 +68,9 @@ function NotificationRow({
 export function NotificationsPanel() {
   const [tab, setTab] = useState<(typeof TABS)[number]>("View All");
   const { data: initialNotifications } = useNotifications();
-  const [notifications, setNotifications] = useState<Notification[]>(initialNotifications as Notification[]);
+  const [notifications, setNotifications] = useState<Notification[]>(
+    initialNotifications as Notification[],
+  );
 
   const unreadCount = notifications.filter((n) => n.unread).length;
 

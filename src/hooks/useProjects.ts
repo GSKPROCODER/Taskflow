@@ -23,7 +23,11 @@ async function fetchProjects(): Promise<Project[]> {
 
 export function useProjects() {
   const q = useQuery({ queryKey: ["projects"], queryFn: fetchProjects });
-  return { data: q.data ?? [], isLoading: q.isLoading, error: q.error } as const;
+  return {
+    data: q.data ?? [],
+    isLoading: q.isLoading,
+    error: q.error,
+  } as const;
 }
 
 export function useProject(id: string | undefined) {

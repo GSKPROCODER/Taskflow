@@ -41,12 +41,8 @@ export function TaskDetailPage() {
   const current = status ?? task.status;
   // Assignee/creator names require a /users/:id endpoint (not yet built).
   // Show truncated IDs as a graceful fallback.
-  const assigneeName = task.assignee_id
-    ? task.assignee_id.slice(0, 8)
-    : null;
-  const creatorName = task.created_by
-    ? task.created_by.slice(0, 8)
-    : "Unknown";
+  const assigneeName = task.assignee_id ? task.assignee_id.slice(0, 8) : null;
+  const creatorName = task.created_by ? task.created_by.slice(0, 8) : "Unknown";
 
   return (
     <div className="space-y-6">
