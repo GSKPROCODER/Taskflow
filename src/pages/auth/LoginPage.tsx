@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -32,9 +32,11 @@ export function LoginPage() {
   } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
   // If already authenticated, redirect to dashboard.
-  if (isAuthenticated) {
-    navigate("/dashboard", { replace: true });
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const onSubmit = async (values: FormValues) => {
     setServerError(null);
